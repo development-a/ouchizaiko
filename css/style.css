@@ -7,7 +7,6 @@ box-sizing:border-box;
 }
 
 
-
 body{
 
 min-height:100vh;
@@ -28,8 +27,6 @@ flex-direction:column;
 
 
 
-
-
 header{
 
 background:#2563eb;
@@ -37,7 +34,6 @@ background:#2563eb;
 color:white;
 
 padding:20px;
-
 
 display:flex;
 
@@ -48,8 +44,6 @@ align-items:center;
 gap:20px;
 
 }
-
-
 
 
 
@@ -79,13 +73,11 @@ border-radius:20px;
 
 
 
-
 .small-nav{
 
 margin-left:auto;
 
 }
-
 
 
 
@@ -127,8 +119,11 @@ align-items:center;
 
 
 
+/* 買い物件数・ボタン統一 */
 
-.shopping-link span{
+.shopping-link span,
+#shopping-count{
+
 
 display:inline-flex;
 
@@ -139,10 +134,11 @@ justify-content:center;
 
 height:36px;
 
+
 padding:0 14px;
 
 
-font-size:20px;
+font-size:14px;
 
 
 background:white;
@@ -156,9 +152,11 @@ border-radius:20px;
 
 font-weight:bold;
 
+
+white-space:nowrap;
+
+
 }
-
-
 
 
 
@@ -166,32 +164,21 @@ font-weight:bold;
 
 main{
 
-
 width:90%;
-
 
 max-width:900px;
 
-
 margin:30px auto;
-
 
 flex:1;
 
-
-
 display:flex;
-
 
 flex-direction:column;
 
-
 gap:20px;
 
-
 }
-
-
 
 
 
@@ -212,14 +199,11 @@ padding:25px;
 border-radius:15px;
 
 
-
 box-shadow:
 
 0 4px 15px rgba(0,0,0,.1);
 
-
 }
-
 
 
 
@@ -227,46 +211,32 @@ box-shadow:
 
 .card-title{
 
-
 display:flex;
-
 
 justify-content:space-between;
 
-
 align-items:center;
-
-
 
 margin-bottom:15px;
 
-
 }
-
 
 
 
 
 #total-items{
 
-
 background:#2563eb;
-
 
 color:white;
 
-
 padding:5px 12px;
-
 
 border-radius:20px;
 
-
 font-size:13px;
 
-
 }
-
 
 
 
@@ -277,19 +247,16 @@ font-size:13px;
 display:grid;
 
 
-
 grid-template-columns:
 
 
 2fr 1fr 1fr;
 
 
-
 gap:10px;
 
 
 }
-
 
 
 
@@ -312,6 +279,7 @@ border:1px solid #ddd;
 
 
 
+
 button{
 
 
@@ -332,7 +300,6 @@ cursor:pointer;
 
 
 
-
 .list-header{
 
 
@@ -343,7 +310,6 @@ justify-content:space-between;
 
 
 align-items:center;
-
 
 
 margin-bottom:15px;
@@ -357,23 +323,17 @@ margin-bottom:15px;
 
 
 
-
 /* 商品カード */
-
 
 .item-wrapper{
 
 width:100%;
 
-
 max-width:650px;
-
 
 margin:0 auto 10px;
 
-
 }
-
 
 
 
@@ -386,44 +346,34 @@ position:relative;
 width:100%;
 
 
-
 background:#f8fafc;
-
 
 
 padding:14px;
 
 
-
 border-radius:10px;
-
 
 
 display:flex;
 
 
-
 justify-content:space-between;
-
 
 
 align-items:center;
 
 
-
 cursor:pointer;
 
 
-
 transition:.2s;
-
 
 
 overflow:hidden;
 
 
 }
-
 
 
 
@@ -435,16 +385,11 @@ transform:translateY(-2px);
 
 
 
-
 .item:active{
 
 opacity:.7;
 
 }
-
-
-
-
 
 
 
@@ -463,12 +408,7 @@ border:1px solid #fecaca;
 
 
 
-
-
-
-
-/* 在庫なし透かし */
-
+/* 在庫なし表示 */
 
 .watermark{
 
@@ -485,32 +425,25 @@ right:20px;
 top:50%;
 
 
-
 transform:translateY(-50%);
-
 
 
 font-size:42px;
 
 
-
 font-weight:bold;
-
 
 
 color:#dc2626;
 
 
-
 opacity:.15;
-
 
 
 pointer-events:none;
 
 
 }
-
 
 
 
@@ -526,22 +459,16 @@ display:block;
 
 
 
-
-
-
 .item-info{
 
 
 display:flex;
 
 
-
 flex-direction:column;
 
 
-
 gap:4px;
-
 
 
 z-index:2;
@@ -559,7 +486,6 @@ z-index:2;
 font-size:16px;
 
 
-
 font-weight:bold;
 
 
@@ -567,14 +493,10 @@ font-weight:bold;
 
 
 
-
-
-
 .item-category{
 
 
 font-size:12px;
-
 
 
 color:#64748b;
@@ -586,16 +508,12 @@ color:#64748b;
 
 
 
-
-
 /* 削除ボタン */
-
 
 .delete-button{
 
 
 display:flex !important;
-
 
 
 width:28px;
@@ -604,33 +522,25 @@ width:28px;
 height:28px;
 
 
-
 border-radius:50%;
-
 
 
 background:#dc2626;
 
 
-
 color:white;
-
 
 
 align-items:center;
 
 
-
 justify-content:center;
-
 
 
 font-size:18px;
 
 
-
 border:none;
-
 
 
 z-index:5;
@@ -642,12 +552,7 @@ z-index:5;
 
 
 
-
-
-
-
 /* 買い物ページ */
-
 
 .shopping-card .item{
 
@@ -659,7 +564,6 @@ border:1px solid #e5e7eb;
 
 
 }
-
 
 
 
@@ -678,9 +582,7 @@ border:1px solid #e5e7eb;
 
 
 
-
-
-
+/* ドラッグ位置 */
 
 .drag-line{
 
@@ -694,15 +596,10 @@ border-top:
 3px dashed #2563eb;
 
 
-
 margin:8px 0;
 
 
 }
-
-
-
-
 
 
 
@@ -725,28 +622,19 @@ padding:20px;
 
 
 
-
-
-
-
 footer{
 
 
 background:#e2e8f0;
 
 
-
 text-align:center;
-
 
 
 padding:15px;
 
 
 }
-
-
-
 
 
 
@@ -768,7 +656,6 @@ flex-direction:column;
 
 
 
-
 .form{
 
 
@@ -779,8 +666,6 @@ grid-template-columns:1fr;
 
 
 
-
-
 .item{
 
 
@@ -788,7 +673,6 @@ max-width:100%;
 
 
 }
-
 
 
 
