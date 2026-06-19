@@ -1,75 +1,20 @@
-<!DOCTYPE html>
+div.innerHTML =
+`
 
-<html lang="ja">
-
-
-<head>
+<div class="item-info">
 
 
-<meta charset="UTF-8">
+<span class="item-name">
 
+${item.name}
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
-
-
-<title>
-買い物リスト
-</title>
+</span>
 
 
 
-<link rel="stylesheet"
-href="css/style.css">
+<span class="item-category">
 
-
-</head>
-
-
-
-
-<body>
-
-
-
-
-<header>
-
-
-
-
-<h1>
-🛒 買い物リスト
-</h1>
-
-
-
-
-
-<nav>
-
-
-<a href="index.html">
-
-🏠 在庫管理
-
-</a>
-
-
-</nav>
-
-
-
-
-
-
-<div class="summary">
-
-
-
-<span id="shopping-count">
-
-買い物 0件
+${item.category}
 
 </span>
 
@@ -77,118 +22,4 @@ href="css/style.css">
 
 </div>
 
-
-
-</header>
-
-
-
-
-
-
-
-
-
-<main>
-
-
-
-
-
-
-<section class="shopping-card">
-
-
-
-
-
-<div class="list-header">
-
-
-
-<h2>
-
-買うもの
-
-</h2>
-
-
-
-
-
-<select
-
-id="filter-category">
-
-
-
-<option value="all">
-
-すべて
-
-</option>
-
-
-
-</select>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-<div id="shopping-list">
-
-
-</div>
-
-
-
-
-
-</section>
-
-
-
-
-
-
-
-</main>
-
-
-
-
-
-
-<footer>
-
-
-GitHub Pages
-
-
-</footer>
-
-
-
-
-
-
-
-<script src="js/storage.js"></script>
-
-
-<script src="js/shopping.js"></script>
-
-
-
-</body>
-
-
-</html>
+`;
