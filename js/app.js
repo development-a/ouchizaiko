@@ -4,9 +4,11 @@ init
 );
 
 
-
 let currentFilter="all";
 
+let dragId=null;
+
+let placeholder=null;
 
 
 
@@ -34,16 +36,16 @@ currentFilter =
 e.target.value;
 
 
-renderInventory();
+render();
 
-}
-);
+});
 
 
 
 render();
 
 }
+
 
 
 
@@ -68,6 +70,7 @@ updateCount();
 
 
 
+
 function addItemForm()
 {
 
@@ -75,6 +78,7 @@ const name =
 document
 .getElementById("item-name")
 .value;
+
 
 
 const category =
@@ -91,8 +95,8 @@ return;
 
 addItem(
 {
-name:name,
-category:category,
+name,
+category,
 stock:true
 }
 );
@@ -114,6 +118,9 @@ render();
 
 
 
+
+
+
 function renderSelect()
 {
 
@@ -121,11 +128,9 @@ const categories =
 getCategories();
 
 
-
 const select =
 document
 .getElementById("item-category");
-
 
 
 const filter =
@@ -134,9 +139,8 @@ document
 
 
 
-if(!select || !filter)
+if(!select||!filter)
 return;
-
 
 
 
@@ -175,10 +179,10 @@ ${category}
 
 
 
-filter.value =
-currentFilter;
+filter.value=currentFilter;
 
 }
+
 
 
 
@@ -196,11 +200,6 @@ document
 
 
 
-if(!area)
-return;
-
-
-
 area.innerHTML="";
 
 
@@ -212,40 +211,16 @@ getItems();
 
 
 
-if(
-currentFilter !== "all"
-)
+if(currentFilter!=="all")
 {
 
 items =
 items.filter(
-item =>
-item.category === currentFilter
+x =>
+x.category===currentFilter
 );
 
 }
-
-
-
-
-
-
-if(items.length===0)
-{
-
-area.innerHTML =
-`
-<div class="empty">
-
-商品なし
-
-</div>
-`;
-
-return;
-
-}
-
 
 
 
@@ -257,12 +232,92 @@ items.forEach(
 item =>
 {
 
-const div =
+
+const wrap =
 document.createElement("div");
 
 
 
-div.className =
+wrap.className =
+"item-wrapper";
+
+
+
+wrap.draggable=true;
+
+
+
+wrap.dataset.id =
+item.id;
+
+
+
+
+
+wrap.ondragstart =
+() =>
+{
+
+dragId=item.id;
+
+};
+
+
+
+
+
+wrap.ondragover =
+e =>
+{
+
+e.preventDefault();
+
+
+
+showPlaceholder(
+wrap
+);
+
+};
+
+
+
+
+
+wrap.ondrop =
+() =>
+{
+
+reorder(
+dragId,
+item.id
+);
+
+
+
+placeholder?.remove();
+
+
+placeholder=null;
+
+
+
+render();
+
+};
+
+
+
+
+
+
+
+const card =
+document.createElement("div");
+
+
+
+card.className =
 item.stock
 ?
 "item"
@@ -273,7 +328,8 @@ item.stock
 
 
 
-div.onclick =
+
+card.onclick =
 () =>
 {
 
@@ -288,8 +344,7 @@ item.id
 
 
 
-
-div.innerHTML =
+card.innerHTML =
 `
 
 <div class="watermark">
@@ -297,7 +352,6 @@ div.innerHTML =
 ${item.stock ? "" : "在庫なし"}
 
 </div>
-
 
 
 <div class="item-info">
@@ -325,7 +379,10 @@ ${item.category}
 
 
 
-area.appendChild(div);
+wrap.appendChild(card);
+
+
+area.appendChild(wrap);
 
 
 
@@ -340,17 +397,109 @@ area.appendChild(div);
 
 
 
+function showPlaceholder(target)
+{
+
+if(!placeholder)
+{
+
+placeholder =
+document.createElement("div");
+
+
+placeholder.className =
+"drag-line";
+
+}
+
+
+
+target.before(
+placeholder
+);
+
+}
+
+
+
+
+
+
+
+
+function reorder(from,to)
+{
+
+const data =
+getData();
+
+
+
+const items =
+data.items;
+
+
+
+const fromIndex =
+items.findIndex(
+x =>
+x.id===from
+);
+
+
+
+const toIndex =
+items.findIndex(
+x =>
+x.id===to
+);
+
+
+
+
+if(
+fromIndex===-1 ||
+toIndex===-1
+)
+return;
+
+
+
+
+const move =
+items.splice(
+fromIndex,
+1
+)[0];
+
+
+
+items.splice(
+toIndex,
+0,
+move
+);
+
+
+
+saveData(data);
+
+}
+
+
+
+
+
+
+
+
 
 function toggleStock(id)
 {
 
-const items =
-getItems();
-
-
-
 const item =
-items.find(
+getItems()
+.find(
 x =>
 x.id===id
 );
@@ -371,12 +520,10 @@ updateItem(item);
 
 
 
-renderInventory();
-
-
-updateCount();
+render();
 
 }
+
 
 
 
@@ -393,7 +540,6 @@ getItems();
 
 
 
-
 document
 .getElementById("total-items")
 .textContent =
@@ -401,19 +547,13 @@ document
 
 
 
-
-const count =
-items.filter(
-x =>
-!x.stock
-).length;
-
-
-
-
 document
 .getElementById("shopping-count")
 .textContent =
-`買い物 ${count}件`;
+`買い物 ${
+items.filter(
+x=>!x.stock
+).length
+}件`;
 
 }
