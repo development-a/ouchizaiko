@@ -2,19 +2,13 @@ document.addEventListener(
     "DOMContentLoaded",
     () =>
     {
-
-        currentFilter = "all";
-
-        setup();
-
-        render();
-
+        initShopping();
     }
 );
 
 
 
-let currentFilter = "all";
+let shoppingFilter = "all";
 
 
 
@@ -22,103 +16,43 @@ let currentFilter = "all";
 
 
 
-function setup()
-{
-
-    document
-    .getElementById(
-        "filter-category"
-    )
-    .addEventListener(
-        "change",
-        e =>
-        {
-
-            currentFilter =
-            e.target.value;
-
-
-            render();
-
-        }
-    );
-
-}
-
-
-
-
-
-
-
-function render()
-{
-
-    renderFilter();
-
-    renderShopping();
-
-    updateCount();
-
-}
-
-
-
-
-
-
-
-
-function renderFilter()
+function initShopping()
 {
 
     const filter =
-        document
-        .getElementById(
-            "filter-category"
-        );
-
-
-
-    const categories =
-    getCategories();
-
-
-
-
-    filter.innerHTML =
-    `
-    <option value="all">
-
-    すべて
-
-    </option>
-    `;
-
-
-
-    categories.forEach(
-        category =>
-        {
-
-            filter.innerHTML +=
-            `
-            <option value="${category}">
-
-            ${category}
-
-            </option>
-            `;
-
-        }
+    document
+    .getElementById(
+        "filter-category"
     );
 
 
 
-    filter.value =
-    currentFilter;
+    if(filter)
+    {
+
+        filter.addEventListener(
+            "change",
+            e =>
+            {
+
+                shoppingFilter =
+                e.target.value;
+
+
+                renderShopping();
+
+            }
+        );
+
+    }
+
+
+
+    renderShopping();
 
 }
+
+
 
 
 
@@ -130,11 +64,21 @@ function renderFilter()
 function renderShopping()
 {
 
+    renderShoppingFilter();
+
+
     const area =
-        document
-        .getElementById(
-            "shopping-list"
-        );
+    document
+    .getElementById(
+        "shopping-list"
+    );
+
+
+
+    if(!area)
+    {
+        return;
+    }
 
 
 
@@ -150,6 +94,10 @@ function renderShopping()
 
 
 
+    /*
+    在庫なしのみ表示
+    */
+
     items =
     items.filter(
         item =>
@@ -161,15 +109,19 @@ function renderShopping()
 
 
 
+    /*
+    フィルター
+    */
+
     if(
-        currentFilter !== "all"
+        shoppingFilter !== "all"
     )
     {
 
         items =
         items.filter(
             item =>
-            item.category === currentFilter
+            item.category === shoppingFilter
         );
 
     }
@@ -194,9 +146,12 @@ function renderShopping()
         `;
 
 
+        updateShoppingCount();
+
         return;
 
     }
+
 
 
 
@@ -224,15 +179,16 @@ function renderShopping()
 
 
 
+            /*
+            タップ購入
+            */
 
             div.onclick =
             () =>
             {
-
                 completeBuy(
                     item.id
                 );
-
             };
 
 
@@ -242,29 +198,33 @@ function renderShopping()
 
 
             div.innerHTML =
-`
-<div class="item-info">
+            `
 
 
-<span class="item-name">
-
-${item.name}
-
-</span>
+            <div class="item-info">
 
 
+            <span class="item-name">
 
-<span class="item-category">
+            ${item.name}
 
-${item.category}
-
-</span>
+            </span>
 
 
 
-</div>
+            <span class="item-category">
 
-`;
+            ${item.category}
+
+            </span>
+
+
+
+            </div>
+
+
+
+            `;
 
 
 
@@ -274,7 +234,81 @@ ${item.category}
         }
     );
 
+
+
+    updateShoppingCount();
+
 }
+
+
+
+
+
+
+
+
+
+function renderShoppingFilter()
+{
+
+    const filter =
+    document
+    .getElementById(
+        "filter-category"
+    );
+
+
+
+    if(!filter)
+    {
+        return;
+    }
+
+
+
+    const categories =
+    getCategories();
+
+
+
+
+    filter.innerHTML =
+    `
+    <option value="all">
+
+    すべて
+
+    </option>
+    `;
+
+
+
+
+
+    categories.forEach(
+        category =>
+        {
+
+            filter.innerHTML +=
+            `
+            <option value="${category}">
+
+            ${category}
+
+            </option>
+            `;
+
+        }
+    );
+
+
+
+    filter.value =
+    shoppingFilter;
+
+}
+
+
 
 
 
@@ -306,6 +340,7 @@ function completeBuy(id)
 
 
 
+
     item.stock =
     true;
 
@@ -320,7 +355,7 @@ function completeBuy(id)
 
 
 
-    render();
+    renderShopping();
 
 }
 
@@ -331,8 +366,25 @@ function completeBuy(id)
 
 
 
-function updateCount()
+
+function updateShoppingCount()
 {
+
+    const area =
+    document
+    .getElementById(
+        "shopping-count"
+    );
+
+
+
+    if(!area)
+    {
+        return;
+    }
+
+
+
 
     const count =
     getItems()
@@ -344,20 +396,8 @@ function updateCount()
 
 
 
-    const area =
-    document
-    .getElementById(
-        "shopping-count"
-    );
 
-
-
-    if(area)
-    {
-
-        area.textContent =
-        `買い物 ${count}件`;
-
-    }
+    area.textContent =
+    `買い物 ${count}件`;
 
 }
