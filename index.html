@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <html lang="ja">
+
 
 <head>
 
@@ -8,8 +10,9 @@
 <meta name="viewport"
 content="width=device-width,initial-scale=1.0">
 
+
 <title>
-おうち在庫管理
+在庫管理
 </title>
 
 
@@ -19,30 +22,41 @@ href="css/style.css">
 </head>
 
 
+
 <body>
+
 
 
 <header>
 
+
 <h1>
-🏠 おうち在庫管理
+🏠 在庫管理
 </h1>
 
 
-<a href="category.html">
-ジャンル管理
+
+<nav>
+
+<a href="shopping.html">
+🛒 買い物
 </a>
+
+
+<a href="category.html">
+📂 ジャンル
+</a>
+
+
+</nav>
+
 
 
 <div class="summary">
 
+
 <span id="total-items">
-登録 0件
-</span>
-
-
-<span id="shopping-count">
-買い物 0件
+0件
 </span>
 
 
@@ -54,7 +68,10 @@ href="css/style.css">
 
 
 
+
+
 <main>
+
 
 
 <section class="input-card">
@@ -74,12 +91,16 @@ id="item-name"
 placeholder="商品名">
 
 
-<select id="item-category">
+<select
+id="item-category">
+
 </select>
 
 
 <button id="add-button">
-登録
+
+追加
+
 </button>
 
 
@@ -92,16 +113,19 @@ placeholder="商品名">
 
 
 
+
+
 <section class="filter-card">
 
 
 <h2>
-フィルター
+ジャンルフィルター
 </h2>
 
 
-<select id="filter-category">
 
+<select
+id="filter-category">
 
 <option value="all">
 
@@ -137,26 +161,8 @@ placeholder="商品名">
 
 
 
-
-
-<section class="shopping-card">
-
-
-<h2>
-🛒 買い物リスト
-</h2>
-
-
-<div id="shopping-list">
-
-</div>
-
-
-</section>
-
-
-
 </main>
+
 
 
 
@@ -168,11 +174,14 @@ GitHub Pages
 
 
 
+
 <script src="js/storage.js"></script>
 
 <script src="js/app.js"></script>
 
 
+
 </body>
+
 
 </html>
