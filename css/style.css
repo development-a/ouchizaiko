@@ -5,6 +5,7 @@ box-sizing:border-box;
 }
 
 
+
 body{
 
 min-height:100vh;
@@ -23,6 +24,7 @@ display:flex;
 flex-direction:column;
 
 }
+
 
 
 
@@ -54,6 +56,7 @@ box-shadow:
 }
 
 
+
 .header h1,
 header h1{
 
@@ -64,8 +67,10 @@ font-size:24px;
 
 
 
+
 nav a,
 .header-nav a{
+
 
 color:white;
 
@@ -81,6 +86,16 @@ border-radius:20px;
 
 
 
+nav a:hover,
+.header-nav a:hover{
+
+background:rgba(255,255,255,.35);
+
+}
+
+
+
+
 
 .header-right{
 
@@ -92,6 +107,8 @@ margin-left:auto;
 
 
 
+/* 買い物ボタン */
+
 .shopping-link{
 
 display:flex;
@@ -102,17 +119,39 @@ justify-content:center;
 
 gap:6px;
 
+
 background:white;
+
 
 color:#2563eb;
 
+
 padding:10px 18px;
+
 
 border-radius:25px;
 
+
 font-weight:bold;
 
-white-space:nowrap;
+
+text-decoration:none;
+
+
+box-shadow:
+
+0 3px 10px rgba(0,0,0,.15);
+
+
+}
+
+
+
+.shopping-link:hover{
+
+text-decoration:none;
+
+opacity:.85;
 
 }
 
@@ -120,27 +159,35 @@ white-space:nowrap;
 
 
 
+
 /* =====================
-layout
+main
 ===================== */
 
 
 main,
 .container{
 
+
 width:90%;
 
 max-width:900px;
 
+
 margin:30px auto;
+
 
 flex:1;
 
+
 display:flex;
+
 
 flex-direction:column;
 
+
 gap:20px;
+
 
 }
 
@@ -162,14 +209,21 @@ card
 
 background:white;
 
+
 padding:25px;
+
 
 border-radius:16px;
 
+
 box-shadow:
+
 0 5px 18px rgba(0,0,0,.1);
 
+
 }
+
+
 
 
 
@@ -180,36 +234,45 @@ box-shadow:
 
 display:flex;
 
+
 justify-content:space-between;
+
 
 align-items:center;
 
+
 margin-bottom:18px;
 
+
 }
+
 
 
 
 
 
 /* =====================
-input
+form
 ===================== */
 
 
-.input-area,
 .form{
 
 
 display:grid;
 
+
 grid-template-columns:
+
 
 2fr 1fr 100px;
 
+
 gap:10px;
 
+
 }
+
 
 
 
@@ -220,36 +283,61 @@ button{
 
 height:42px;
 
+
 padding:0 12px;
+
 
 border-radius:8px;
 
+
 border:1px solid #ddd;
+
 
 font-size:14px;
 
+
 }
+
+
 
 
 
 button{
 
+
 background:#2563eb;
+
 
 color:white;
 
+
 border:none;
+
 
 cursor:pointer;
 
+
 }
+
+
+
+
+
+button:hover{
+
+
+opacity:.85;
+
+
+}
+
 
 
 
 
 
 /* =====================
-inventory
+list
 ===================== */
 
 
@@ -260,11 +348,16 @@ inventory
 
 display:flex;
 
+
 flex-direction:column;
+
 
 gap:10px;
 
+
 }
+
+
 
 
 
@@ -274,38 +367,57 @@ gap:10px;
 
 position:relative;
 
+
 background:#f8fafc;
+
 
 padding:15px;
 
+
 border-radius:12px;
+
 
 border:1px solid #e5e7eb;
 
+
 display:flex;
+
 
 align-items:center;
 
+
 justify-content:space-between;
+
 
 gap:10px;
 
+
 cursor:pointer;
+
 
 transition:.2s;
 
+
 }
+
+
 
 
 
 .item:hover{
 
+
 transform:translateY(-2px);
 
+
 box-shadow:
+
+
 0 4px 10px rgba(0,0,0,.08);
 
+
 }
+
 
 
 
@@ -313,14 +425,20 @@ box-shadow:
 
 .item[draggable="true"]{
 
+
 cursor:grab;
+
 
 }
 
 
+
+
 .item[draggable="true"]:active{
 
+
 cursor:grabbing;
+
 
 }
 
@@ -330,9 +448,12 @@ cursor:grabbing;
 
 .item.no-stock{
 
+
 background:#fee2e2;
 
+
 border-color:#fecaca;
+
 
 }
 
@@ -342,54 +463,82 @@ border-color:#fecaca;
 
 .item-info{
 
+
 display:flex;
+
 
 flex-direction:column;
 
+
 gap:5px;
 
+
 }
+
 
 
 
 
 .item-name{
 
-font-size:16px;
 
 font-weight:bold;
 
+
+font-size:16px;
+
+
 }
+
 
 
 
 
 .item-category{
 
+
 font-size:12px;
 
+
 color:#64748b;
+
 
 }
 
 
 
 
+
+
+/* 在庫なし透かし */
+
+
 .watermark{
+
 
 display:none;
 
+
 position:absolute;
+
 
 right:80px;
 
+
 font-size:40px;
+
 
 font-weight:bold;
 
+
 color:#dc2626;
 
+
 opacity:.15;
+
+
+pointer-events:none;
+
 
 }
 
@@ -398,9 +547,12 @@ opacity:.15;
 
 .item.no-stock .watermark{
 
+
 display:block;
 
+
 }
+
 
 
 
@@ -416,23 +568,33 @@ delete
 
 width:60px;
 
+
 height:32px;
+
 
 border-radius:20px;
 
+
 background:#dc2626;
+
 
 color:white;
 
+
 font-size:13px;
+
 
 display:flex;
 
+
 align-items:center;
+
 
 justify-content:center;
 
+
 flex-shrink:0;
+
 
 }
 
@@ -440,27 +602,36 @@ flex-shrink:0;
 
 
 
+
+
 /* =====================
-drag
+drag placeholder
 ===================== */
 
 
 .drag-placeholder{
 
 
-height:35px;
+height:45px;
+
 
 display:flex;
 
+
 align-items:center;
+
 
 justify-content:center;
 
+
 color:#2563eb;
+
 
 font-weight:bold;
 
-letter-spacing:3px;
+
+letter-spacing:5px;
+
 
 border-top:
 
@@ -474,9 +645,16 @@ border-bottom:
 
 background:#eff6ff;
 
-border-radius:8px;
+
+border-radius:10px;
+
+
+margin:5px 0;
+
 
 }
+
+
 
 
 
@@ -492,17 +670,32 @@ category
 
 display:flex;
 
+
 gap:10px;
 
+
 }
+
 
 
 
 .category-form input{
 
+
+height:45px;
+
+
+font-size:16px;
+
+
+padding:0 14px;
+
+
 flex:1;
 
+
 }
+
 
 
 
@@ -512,9 +705,12 @@ flex:1;
 
 display:flex;
 
+
 flex-direction:column;
 
+
 gap:10px;
+
 
 }
 
@@ -527,17 +723,24 @@ gap:10px;
 
 background:#f8fafc;
 
+
 padding:14px;
+
 
 border-radius:10px;
 
+
 border:1px solid #e5e7eb;
+
 
 display:flex;
 
-justify-content:space-between;
 
 align-items:center;
+
+
+justify-content:space-between;
+
 
 }
 
@@ -547,43 +750,72 @@ align-items:center;
 
 .category-item button{
 
+
 background:#dc2626;
+
 
 height:32px;
 
+
 padding:0 15px;
 
+
 border-radius:20px;
+
 
 }
 
 
 
+
+
+
+
+/* =====================
+empty
+===================== */
 
 
 .empty{
 
+
 text-align:center;
+
 
 padding:25px;
 
+
 color:#94a3b8;
+
 
 }
 
 
 
+
+
+
+
+/* =====================
+footer
+===================== */
 
 
 footer{
 
+
 background:#e2e8f0;
+
 
 text-align:center;
 
+
 padding:15px;
 
+
 }
+
+
 
 
 
@@ -595,43 +827,63 @@ mobile
 ===================== */
 
 
-@media(max-width:700px){
+@media(max-width:700px)
 
+{
 
 
 .header,
 header{
 
+
 flex-direction:column;
+
 
 align-items:stretch;
 
+
 }
+
 
 
 
 .header-right{
 
+
 margin-left:0;
 
+
 }
+
+
 
 
 
 .shopping-link{
 
+
 justify-content:center;
 
+
 }
 
 
 
-.input-area,
+
+
+
 .form{
 
-grid-template-columns:1fr;
+
+grid-template-columns:
+
+
+1fr;
+
 
 }
+
+
 
 
 
@@ -642,9 +894,12 @@ grid-template-columns:1fr;
 .shopping-card,
 .category-card{
 
+
 padding:18px;
 
+
 }
+
 
 
 
@@ -654,39 +909,56 @@ padding:18px;
 .card-title,
 .list-header{
 
+
 flex-direction:column;
+
 
 align-items:flex-start;
 
+
 gap:10px;
 
+
 }
+
+
 
 
 
 
 .item{
 
+
 padding:12px;
 
+
 }
+
+
+
 
 
 
 .delete-button{
 
+
 width:55px;
 
+
 }
+
 
 
 
 
 .category-form{
 
+
 flex-direction:column;
 
+
 }
+
 
 
 
@@ -695,7 +967,9 @@ flex-direction:column;
 
 width:100%;
 
-height:45px;
+
+height:48px;
+
 
 font-size:16px;
 
