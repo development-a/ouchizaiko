@@ -17,8 +17,8 @@ body{
     color:#333;
 
     font-family:
-        "Segoe UI",
-        sans-serif;
+    "Segoe UI",
+    sans-serif;
 
     display:flex;
 
@@ -38,37 +38,14 @@ header{
 
     padding:20px;
 
-    display:flex;
 
-    justify-content:space-between;
+    display:flex;
 
     align-items:center;
 
+    justify-content:space-between;
+
     gap:20px;
-
-}
-
-
-
-header h1{
-
-    font-size:24px;
-
-}
-
-
-
-header a{
-
-    color:white;
-
-    text-decoration:none;
-
-    background:rgba(255,255,255,0.2);
-
-    padding:8px 14px;
-
-    border-radius:20px;
 
 }
 
@@ -88,6 +65,24 @@ nav{
 
 
 
+header a{
+
+    color:white;
+
+    text-decoration:none;
+
+    background:rgba(255,255,255,.2);
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+}
+
+
+
+
+
 .summary{
 
     display:flex;
@@ -95,6 +90,8 @@ nav{
     gap:10px;
 
 }
+
+
 
 
 
@@ -111,6 +108,7 @@ nav{
     font-weight:bold;
 
 }
+
 
 
 
@@ -140,7 +138,6 @@ main{
 
 
 .input-card,
-.filter-card,
 .list-card,
 .shopping-card,
 .category-card{
@@ -156,21 +153,9 @@ main{
     box-shadow:
 
     0 4px 15px
-    rgba(0,0,0,0.1);
+    rgba(0,0,0,.1);
 
 }
-
-
-
-
-
-
-h2{
-
-    margin-bottom:15px;
-
-}
-
 
 
 
@@ -208,7 +193,6 @@ button{
 
 
 
-
 button{
 
     background:#2563eb;
@@ -225,9 +209,28 @@ button{
 
 
 
+.list-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+
 
 
 .item{
+
+
+    position:relative;
 
 
     background:#f8fafc;
@@ -254,6 +257,9 @@ button{
     cursor:pointer;
 
 
+    overflow:hidden;
+
+
     transition:.2s;
 
 }
@@ -263,7 +269,81 @@ button{
 
 .item:hover{
 
-    background:#eef2ff;
+    transform:translateY(-2px);
+
+}
+
+
+
+
+
+
+
+/*
+-------------------------------
+在庫なしカード
+-------------------------------
+*/
+
+
+.item.no-stock{
+
+
+    background:#fee2e2;
+
+
+    border:1px solid #fecaca;
+
+}
+
+
+
+
+.watermark{
+
+
+    display:none;
+
+
+    position:absolute;
+
+
+    right:20px;
+
+
+    top:50%;
+
+
+    transform:
+
+    translateY(-50%);
+
+
+    font-size:48px;
+
+
+    font-weight:bold;
+
+
+    color:#dc2626;
+
+
+    opacity:.15;
+
+
+    pointer-events:none;
+
+}
+
+
+
+
+
+.item.no-stock
+.watermark{
+
+
+    display:block;
 
 }
 
@@ -278,7 +358,10 @@ button{
 
     flex-direction:column;
 
-    gap:6px;
+    gap:5px;
+
+
+    z-index:2;
 
 }
 
@@ -310,6 +393,7 @@ button{
 
 
 
+
 .item-actions{
 
     display:flex;
@@ -318,26 +402,32 @@ button{
 
     gap:10px;
 
+    z-index:3;
+
 }
 
 
 
 
 
+
+
+
+
 /*
-------------------------------
+-------------------------------
 スイッチ
-------------------------------
+-------------------------------
 */
 
 
 .switch{
 
-    position:relative;
-
     width:52px;
 
     height:28px;
+
+    position:relative;
 
 }
 
@@ -351,9 +441,12 @@ button{
 
 
 
+
 .slider{
 
+
     position:absolute;
+
 
     inset:0;
 
@@ -403,6 +496,7 @@ button{
 
     transition:.3s;
 
+
 }
 
 
@@ -410,7 +504,9 @@ button{
 
 
 
-.switch input:checked + .slider{
+
+.switch input:checked
++ .slider{
 
 
     background:#16a34a;
@@ -422,12 +518,15 @@ button{
 
 
 
-.switch input:checked + .slider:before{
+.switch input:checked
++ .slider:before{
 
 
-    transform:translateX(24px);
+    transform:
+    translateX(24px);
 
 }
+
 
 
 
@@ -453,10 +552,8 @@ button{
 
     background:#64748b;
 
-
-    font-size:14px;
-
 }
+
 
 
 
@@ -475,13 +572,8 @@ button{
 
     border-radius:10px;
 
-
-    margin-bottom:10px;
-
-
-    cursor:pointer;
-
 }
+
 
 
 
@@ -514,6 +606,7 @@ button{
 
 
 
+
 .category-delete{
 
 
@@ -521,10 +614,7 @@ button{
 
     padding:6px 10px;
 
-    font-size:12px;
-
 }
-
 
 
 
@@ -534,13 +624,42 @@ button{
 .empty{
 
 
-    padding:20px;
-
     text-align:center;
 
     color:#94a3b8;
 
+    padding:20px;
+
 }
+
+
+
+
+
+
+
+/*
+-------------------------------
+ドラッグ位置
+-------------------------------
+*/
+
+
+.drag-line{
+
+
+    height:4px;
+
+
+    margin:6px 0;
+
+
+    border-top:
+
+    3px dashed #2563eb;
+
+}
+
 
 
 
@@ -549,13 +668,19 @@ button{
 
 footer{
 
+
     background:#e2e8f0;
 
+
     text-align:center;
+
 
     padding:15px;
 
 }
+
+
+
 
 
 
@@ -583,11 +708,15 @@ header{
 
 
 
+
 .item{
+
 
     flex-direction:column;
 
+
     align-items:flex-start;
+
 
     gap:15px;
 
@@ -596,6 +725,7 @@ header{
 
 
 .item-actions{
+
 
     width:100%;
 
