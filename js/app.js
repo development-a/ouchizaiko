@@ -4,6 +4,7 @@ init
 );
 
 
+
 let currentFilter = "all";
 
 let dragId = null;
@@ -14,10 +15,8 @@ let placeholder = null;
 
 
 
-
 function init()
 {
-
 
 document
 .getElementById("add-button")
@@ -36,13 +35,11 @@ document
 e =>
 {
 
-
 currentFilter =
 e.target.value;
 
 
 renderInventory();
-
 
 });
 
@@ -58,17 +55,14 @@ render();
 
 
 
-
 function render()
 {
-
 
 renderSelect();
 
 renderInventory();
 
 updateCount();
-
 
 }
 
@@ -83,11 +77,13 @@ updateCount();
 function addItemForm()
 {
 
+const input =
+document
+.getElementById("item-name");
+
 
 const name =
-document
-.getElementById("item-name")
-.value.trim();
+input.value.trim();
 
 
 
@@ -98,13 +94,11 @@ document
 
 
 
-
 if(name === "")
 {
-
 return;
-
 }
+
 
 
 
@@ -123,11 +117,7 @@ stock:true
 
 
 
-
-
-document
-.getElementById("item-name")
-.value="";
+input.value="";
 
 
 
@@ -146,10 +136,8 @@ render();
 function renderSelect()
 {
 
-
 const categories =
 getCategories();
-
 
 
 
@@ -165,15 +153,8 @@ document
 
 
 
-
-
 if(!itemSelect || !filterSelect)
-{
-
 return;
-
-}
-
 
 
 
@@ -185,15 +166,12 @@ itemSelect.innerHTML="";
 
 filterSelect.innerHTML =
 `
-
 <option value="all">
 
 すべて
 
 </option>
-
 `;
-
 
 
 
@@ -207,13 +185,11 @@ category =>
 itemSelect.innerHTML +=
 
 `
-
 <option value="${category}">
 
 ${category}
 
 </option>
-
 `;
 
 
@@ -222,18 +198,14 @@ ${category}
 filterSelect.innerHTML +=
 
 `
-
 <option value="${category}">
 
 ${category}
 
 </option>
-
 `;
 
 });
-
-
 
 
 
@@ -255,7 +227,6 @@ currentFilter;
 }
 
 else
-
 {
 
 currentFilter="all";
@@ -263,7 +234,6 @@ currentFilter="all";
 filterSelect.value="all";
 
 }
-
 
 
 }
@@ -291,7 +261,9 @@ return;
 
 
 
+
 area.innerHTML="";
+
 
 
 
@@ -302,18 +274,14 @@ getItems();
 
 
 
-
-
 if(currentFilter !== "all")
 {
-
 
 items =
 items.filter(
 item =>
 item.category === currentFilter
 );
-
 
 }
 
@@ -322,21 +290,16 @@ item.category === currentFilter
 
 
 
-
-
-if(items.length === 0)
+if(items.length===0)
 {
-
 
 area.innerHTML =
 `
-
 <div class="empty">
 
 商品がありません
 
 </div>
-
 `;
 
 return;
@@ -349,10 +312,10 @@ return;
 
 
 
+
 items.forEach(
 item =>
 {
-
 
 
 const card =
@@ -360,17 +323,12 @@ document.createElement("div");
 
 
 
-
 card.className =
 item.stock
 ?
-
 "item"
-
 :
-
 "item no-stock";
-
 
 
 
@@ -397,7 +355,6 @@ ${item.stock ? "" : "在庫なし"}
 
 
 
-
 <div class="item-info">
 
 
@@ -408,7 +365,6 @@ ${item.name}
 </span>
 
 
-
 <span class="item-category">
 
 ${item.category}
@@ -416,9 +372,7 @@ ${item.category}
 </span>
 
 
-
 </div>
-
 
 
 
@@ -439,25 +393,19 @@ ${item.category}
 
 
 
-/*
-在庫切替
-*/
+
+// 在庫変更
 
 card.onclick =
 e =>
 {
-
 
 if(
 e.target.classList.contains(
 "delete-button"
 )
 )
-{
-
 return;
-
-}
 
 
 
@@ -476,10 +424,7 @@ item.id
 
 
 
-/*
-削除
-*/
-
+// 削除
 
 card
 .querySelector(".delete-button")
@@ -492,19 +437,19 @@ e.stopPropagation();
 
 
 
-
 if(
 confirm(
 `${item.name}を削除しますか？`
 )
 
 )
-
 {
+
 
 deleteItem(
 item.id
 );
+
 
 
 render();
@@ -522,10 +467,7 @@ render();
 
 
 
-
-/*
-ドラッグ開始
-*/
+// ドラッグ開始
 
 card.addEventListener(
 "dragstart",
@@ -551,9 +493,7 @@ card.style.display="none";
 );
 
 
-}
-
-);
+});
 
 
 
@@ -562,9 +502,8 @@ card.style.display="none";
 
 
 
-/*
-ドラッグ終了
-*/
+
+// ドラッグ終了
 
 card.addEventListener(
 "dragend",
@@ -573,12 +512,11 @@ card.addEventListener(
 
 card.style.display="flex";
 
+
 removePlaceholder();
 
 
-}
-
-);
+});
 
 
 
@@ -588,9 +526,8 @@ removePlaceholder();
 
 
 
-/*
-ドラッグ中
-*/
+
+// ドラッグ中
 
 card.addEventListener(
 "dragover",
@@ -617,15 +554,19 @@ rect.height / 2;
 
 
 
+
 if(
 e.clientY < center
 )
 
 {
 
-card.before(
-placeholder
+
+card.parentNode.insertBefore(
+placeholder,
+card
 );
+
 
 }
 
@@ -633,17 +574,17 @@ else
 
 {
 
-card.after(
-placeholder
+
+card.parentNode.insertBefore(
+placeholder,
+card.nextSibling
 );
+
 
 }
 
 
-
-}
-
-);
+});
 
 
 
@@ -654,9 +595,8 @@ placeholder
 
 
 
-/*
-ドロップ
-*/
+
+// ドロップ
 
 card.addEventListener(
 "drop",
@@ -671,8 +611,7 @@ e.preventDefault();
 
 
 const target =
-placeholder
-.previousElementSibling;
+placeholder.previousElementSibling;
 
 
 
@@ -694,12 +633,13 @@ target.dataset.id
 
 
 
+
 render();
 
 
-}
+});
 
-);
+
 
 
 
@@ -710,10 +650,7 @@ render();
 area.appendChild(card);
 
 
-
-}
-
-);
+});
 
 
 }
@@ -757,13 +694,14 @@ placeholder.textContent =
 
 
 
+
+
 function removePlaceholder()
 {
 
 
 if(placeholder)
 {
-
 
 placeholder.remove();
 
@@ -795,10 +733,8 @@ getData();
 
 
 
-
 const items =
 data.items;
-
 
 
 
@@ -826,9 +762,7 @@ if(
 from === -1 ||
 to === -1
 )
-
 return;
-
 
 
 
@@ -854,13 +788,10 @@ move
 
 
 
-
 saveData(data);
 
 
-
 }
-
 
 
 
@@ -879,13 +810,11 @@ getItems();
 
 
 
-
 const item =
 items.find(
 x =>
-x.id === id
+x.id===id
 );
-
 
 
 
@@ -896,13 +825,8 @@ return;
 
 
 
-
-
 item.stock =
 !item.stock;
-
-
-
 
 
 
@@ -910,12 +834,10 @@ updateItem(item);
 
 
 
-
 render();
 
 
 }
-
 
 
 
@@ -942,10 +864,7 @@ document
 
 
 
-
-
 if(total)
-
 {
 
 total.textContent =
@@ -959,35 +878,25 @@ total.textContent =
 
 
 
-
 const shopping =
 document
 .getElementById("shopping-count");
 
 
 
-
-
-
 if(shopping)
-
 {
 
 
 shopping.textContent =
 
-`
-
-買い物 ${
+`買い物 ${
 items.filter(
 x =>
-x.stock === false
+x.stock===false
 )
 .length
-}件
-
-`;
-
+}件`;
 
 }
 
