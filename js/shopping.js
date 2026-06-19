@@ -22,7 +22,9 @@ document
 e =>
 {
 
-shoppingFilter=e.target.value;
+shoppingFilter =
+e.target.value;
+
 
 renderShopping();
 
@@ -50,6 +52,7 @@ renderShoppingFilter();
 
 
 
+
 const area =
 document
 .getElementById("shopping-list");
@@ -66,23 +69,27 @@ area.innerHTML="";
 
 
 
+
+
 let items =
 getItems()
 .filter(
-x=>x.stock===false
+item =>
+item.stock === false
 );
 
 
 
 
 
-if(shoppingFilter!=="all")
+
+if(shoppingFilter !== "all")
 {
 
 items =
 items.filter(
-x =>
-x.category===shoppingFilter
+item =>
+item.category === shoppingFilter
 );
 
 }
@@ -92,10 +99,12 @@ x.category===shoppingFilter
 
 
 
-if(items.length===0)
+
+
+if(items.length === 0)
 {
 
-area.innerHTML=
+area.innerHTML =
 `
 
 <div class="empty">
@@ -106,7 +115,10 @@ area.innerHTML=
 
 `;
 
+
+
 updateShoppingCount();
+
 
 return;
 
@@ -123,44 +135,19 @@ item =>
 {
 
 
-const div =
+const card =
 document.createElement("div");
 
 
 
-div.className="item";
-
-
-
-
-div.onclick =
-() =>
-{
-
-if(
-confirm(
-`${item.name}を購入済みにしますか？`
-)
-)
-{
-
-item.stock=true;
-
-updateItem(item);
-
-
-renderShopping();
-
-}
-
-};
+card.className =
+"item";
 
 
 
 
 
-
-div.innerHTML =
+card.innerHTML =
 `
 
 <div class="item-info">
@@ -181,8 +168,8 @@ ${item.category}
 </span>
 
 
-</div>
 
+</div>
 
 `;
 
@@ -190,7 +177,44 @@ ${item.category}
 
 
 
-area.appendChild(div);
+
+
+
+
+/*
+--------------------------------
+タップ
+購入済みに戻す
+--------------------------------
+*/
+
+
+card.onclick =
+() =>
+{
+
+
+item.stock = true;
+
+
+
+updateItem(item);
+
+
+
+renderShopping();
+
+
+
+};
+
+
+
+
+
+
+
+area.appendChild(card);
 
 
 });
@@ -201,7 +225,9 @@ area.appendChild(div);
 
 updateShoppingCount();
 
+
 }
+
 
 
 
@@ -239,28 +265,39 @@ filter.innerHTML =
 
 
 
+
+
+
 getCategories()
 .forEach(
-c=>
+category =>
 {
+
 
 filter.innerHTML +=
 
 `
-<option value="${c}">
 
-${c}
+<option value="${category}">
+
+${category}
 
 </option>
+
 `;
 
 });
 
 
 
-filter.value=shoppingFilter;
+
+
+filter.value =
+shoppingFilter;
+
 
 }
+
 
 
 
@@ -276,9 +313,12 @@ function updateShoppingCount()
 const count =
 getItems()
 .filter(
-x=>x.stock===false
+item =>
+item.stock === false
 )
 .length;
+
+
 
 
 
@@ -292,6 +332,7 @@ if(target)
 {
 
 target.textContent =
+
 `買い物 ${count}件`;
 
 }
