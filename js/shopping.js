@@ -51,8 +51,6 @@ function setup()
 
 
 
-
-
 function render()
 {
 
@@ -83,7 +81,8 @@ function renderFilter()
 
 
     const categories =
-        getCategories();
+    getCategories();
+
 
 
 
@@ -95,7 +94,6 @@ function renderFilter()
 
     </option>
     `;
-
 
 
 
@@ -118,10 +116,9 @@ function renderFilter()
 
 
     filter.value =
-        currentFilter;
+    currentFilter;
 
 }
-
 
 
 
@@ -146,16 +143,12 @@ function renderShopping()
 
 
     let items =
-        getItems();
+    getItems();
 
 
 
 
 
-
-    /*
-    在庫なしだけ表示
-    */
 
     items =
     items.filter(
@@ -188,7 +181,7 @@ function renderShopping()
 
 
 
-    if(items.length===0)
+    if(items.length === 0)
     {
 
         area.innerHTML =
@@ -204,6 +197,7 @@ function renderShopping()
         return;
 
     }
+
 
 
 
@@ -230,9 +224,6 @@ function renderShopping()
 
 
 
-            /*
-            商品タップで購入
-            */
 
             div.onclick =
             () =>
@@ -249,16 +240,9 @@ function renderShopping()
 
 
 
+
             div.innerHTML =
 `
-<div class="watermark">
-
-買い物
-
-</div>
-
-
-
 <div class="item-info">
 
 
@@ -278,24 +262,13 @@ ${item.category}
 
 
 
-
-<span class="stock-status">
-
-タップして購入完了
-
-</span>
-
-
-
 </div>
-
 
 `;
 
 
 
             area.appendChild(div);
-
 
 
         }
@@ -310,20 +283,19 @@ ${item.category}
 
 
 
-
 function completeBuy(id)
 {
 
     const items =
-        getItems();
+    getItems();
 
 
 
     const item =
-        items.find(
-            x =>
-            x.id===id
-        );
+    items.find(
+        x =>
+        x.id === id
+    );
 
 
 
@@ -335,12 +307,12 @@ function completeBuy(id)
 
 
     item.stock =
-        true;
+    true;
 
 
 
     item.shopping =
-        false;
+    false;
 
 
 
@@ -350,9 +322,7 @@ function completeBuy(id)
 
     render();
 
-
 }
-
 
 
 
