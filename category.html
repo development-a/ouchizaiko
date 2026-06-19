@@ -3,7 +3,6 @@
 <html lang="ja">
 
 
-
 <head>
 
 
@@ -11,8 +10,7 @@
 
 
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0">
-
+content="width=device-width, initial-scale=1.0">
 
 
 <title>
@@ -23,6 +21,7 @@ content="width=device-width,initial-scale=1.0">
 
 <link rel="stylesheet"
 href="css/style.css">
+
 
 
 </head>
@@ -37,30 +36,45 @@ href="css/style.css">
 
 
 
-<header>
+<header class="header">
 
 
+
+
+
+<div class="header-left">
 
 
 <h1>
+
 ⚙ ジャンル管理
+
 </h1>
 
 
+</div>
 
 
 
-<nav>
+
+
+
+
+<nav class="header-nav">
 
 
 <a href="index.html">
 
-🏠 在庫管理
+
+🏠 在庫管理へ戻る
+
 
 </a>
 
 
 </nav>
+
+
 
 
 
@@ -75,16 +89,23 @@ href="css/style.css">
 
 
 
-<main>
+<main class="container">
 
 
 
 
 
-<section class="category-card">
 
 
 
+<section class="card category-card">
+
+
+
+
+
+
+<div class="card-header">
 
 
 <h2>
@@ -94,11 +115,16 @@ href="css/style.css">
 </h2>
 
 
+</div>
 
 
 
 
-<div class="form">
+
+
+
+<div class="category-form">
+
 
 
 
@@ -109,6 +135,7 @@ href="css/style.css">
 id="new-category"
 
 placeholder="ジャンル名">
+
 
 
 
@@ -128,7 +155,9 @@ id="add-category">
 
 
 
+
 </div>
+
 
 
 
@@ -143,10 +172,15 @@ id="add-category">
 
 
 
-<section class="category-card">
+
+<section class="card category-card">
 
 
 
+
+
+
+<div class="card-header">
 
 
 <h2>
@@ -156,13 +190,20 @@ id="add-category">
 </h2>
 
 
+</div>
 
 
 
 
-<div id="category-list">
+
+
+
+<div id="category-list"
+class="category-list">
+
 
 </div>
+
 
 
 
@@ -176,7 +217,11 @@ id="add-category">
 
 
 
+
 </main>
+
+
+
 
 
 
@@ -197,11 +242,11 @@ GitHub Pages
 
 
 
-
 <script src="js/storage.js"></script>
 
 
 <script src="js/category.js"></script>
+
 
 
 
