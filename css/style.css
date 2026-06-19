@@ -763,3 +763,53 @@ max-width:100%;
 
 
 }
+
+.item-wrapper{
+
+position:relative;
+
+max-width:650px;
+
+width:100%;
+
+margin:0 auto 10px;
+
+}
+
+
+
+.item-wrapper{
+
+cursor:grab;
+
+}
+
+
+
+.item-wrapper:active{
+
+cursor:grabbing;
+
+}
+
+
+
+.drag-line{
+
+height:5px;
+
+border-top:
+
+3px dashed #2563eb;
+
+margin:8px 0;
+
+}
+
+
+
+.item-wrapper.dragging{
+
+opacity:.5;
+
+}
