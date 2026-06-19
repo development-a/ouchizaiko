@@ -1,328 +1,152 @@
-document.addEventListener(
-    "DOMContentLoaded",
-    () =>
-    {
+<!DOCTYPE html>
 
-        currentFilter = "all";
+<html lang="ja">
 
-        setup();
 
-        render();
+<head>
 
-    }
-);
+<meta charset="UTF-8">
 
 
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-let currentFilter = "all";
 
+<title>
+買い物リスト
+</title>
 
 
 
+<link rel="stylesheet"
+href="css/style.css">
 
 
+</head>
 
-function setup()
-{
 
-    document
-    .getElementById(
-        "filter-category"
-    )
-    .addEventListener(
-        "change",
-        e =>
-        {
 
-            currentFilter =
-            e.target.value;
+<body>
 
 
-            render();
 
-        }
-    );
+<header>
 
-}
 
+<h1>
 
+🛒 買い物リスト
 
+</h1>
 
 
 
 
-function render()
-{
+<nav>
 
-    renderFilter();
 
-    renderShopping();
+<a href="index.html">
 
-    updateCount();
+🏠 在庫管理
 
-}
+</a>
 
 
+</nav>
 
 
 
 
 
+<div class="summary">
 
-function renderFilter()
-{
 
-    const filter =
-        document
-        .getElementById(
-            "filter-category"
-        );
+<span id="shopping-count">
 
-
-
-    const categories =
-    getCategories();
-
-
-
-
-    filter.innerHTML =
-    `
-    <option value="all">
-
-    すべて
-
-    </option>
-    `;
-
-
-
-    categories.forEach(
-        category =>
-        {
-
-            filter.innerHTML +=
-            `
-            <option value="${category}">
-
-            ${category}
-
-            </option>
-            `;
-
-        }
-    );
-
-
-
-    filter.value =
-    currentFilter;
-
-}
-
-
-
-
-
-
-
-
-function renderShopping()
-{
-
-    const area =
-        document
-        .getElementById(
-            "shopping-list"
-        );
-
-
-
-    area.innerHTML="";
-
-
-
-    let items =
-    getItems();
-
-
-
-
-
-
-    items =
-    items.filter(
-        item =>
-        !item.stock
-    );
-
-
-
-
-
-
-    if(
-        currentFilter !== "all"
-    )
-    {
-
-        items =
-        items.filter(
-            item =>
-            item.category === currentFilter
-        );
-
-    }
-
-
-
-
-
-
-
-
-    if(items.length === 0)
-    {
-
-        area.innerHTML =
-        `
-        <div class="empty">
-
-        買い物はありません
-
-        </div>
-        `;
-
-
-        return;
-
-    }
-
-
-
-
-
-
-
-
-    items.forEach(
-        item =>
-        {
-
-
-            const div =
-            document.createElement(
-                "div"
-            );
-
-
-
-            div.className =
-            "item no-stock";
-
-
-
-
-
-
-            div.onclick =
-            () =>
-            {
-
-                completeBuy(
-                    item.id
-                );
-
-            };
-
-
-
-
-
-
-
-            div.innerHTML =
-`
-<div class="item-info">
-
-
-<span class="item-name">
-
-${item.name}
+買い物 0件
 
 </span>
 
 
+</div>
 
-<span class="item-category">
 
-${item.category}
 
-</span>
+</header>
+
+
+
+
+
+
+
+
+
+<main>
+
+
+
+
+
+
+<section class="shopping-card">
+
+
+
+
+
+<div class="list-header">
+
+
+
+<h2>
+
+買うもの
+
+</h2>
+
+
+
+
+
+<select id="filter-category">
+
+
+<option value="all">
+
+すべて
+
+</option>
+
+
+</select>
 
 
 
 </div>
 
-`;
-
-
-
-            area.appendChild(div);
-
-
-        }
-    );
-
-}
 
 
 
 
 
 
+<div id="shopping-list">
 
-
-function completeBuy(id)
-{
-
-    const items =
-    getItems();
+</div>
 
 
 
-    const item =
-    items.find(
-        x =>
-        x.id === id
-    );
+
+
+</section>
 
 
 
-    if(!item)
-    {
-        return;
-    }
 
 
 
-    item.stock =
-    true;
-
-
-
-    item.shopping =
-    false;
-
-
-
-    updateItem(item);
-
-
-
-    render();
-
-}
+</main>
 
 
 
@@ -331,33 +155,28 @@ function completeBuy(id)
 
 
 
-function updateCount()
-{
+<footer>
 
-    const count =
-    getItems()
-    .filter(
-        item =>
-        !item.stock
-    )
-    .length;
+
+GitHub Pages
+
+
+</footer>
 
 
 
-    const area =
-    document
-    .getElementById(
-        "shopping-count"
-    );
 
 
 
-    if(area)
-    {
 
-        area.textContent =
-        `買い物 ${count}件`;
+<script src="js/storage.js"></script>
 
-    }
 
-}
+<script src="js/shopping.js"></script>
+
+
+
+</body>
+
+
+</html>
