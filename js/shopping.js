@@ -3,9 +3,7 @@ document.addEventListener(
     () =>
     {
 
-        currentFilter =
-            "all";
-
+        currentFilter = "all";
 
         setup();
 
@@ -24,12 +22,6 @@ let currentFilter = "all";
 
 
 
-/*
---------------------------------
-初期設定
---------------------------------
-*/
-
 function setup()
 {
 
@@ -43,7 +35,7 @@ function setup()
         {
 
             currentFilter =
-                e.target.value;
+            e.target.value;
 
 
             render();
@@ -60,11 +52,6 @@ function setup()
 
 
 
-/*
---------------------------------
-描画
---------------------------------
-*/
 
 function render()
 {
@@ -73,7 +60,7 @@ function render()
 
     renderShopping();
 
-    updateShoppingCount();
+    updateCount();
 
 }
 
@@ -83,13 +70,6 @@ function render()
 
 
 
-
-
-/*
---------------------------------
-フィルター
---------------------------------
-*/
 
 function renderFilter()
 {
@@ -107,24 +87,28 @@ function renderFilter()
 
 
 
-
     filter.innerHTML =
     `
     <option value="all">
+
     すべて
+
     </option>
     `;
 
 
 
+
     categories.forEach(
-        c =>
+        category =>
         {
 
             filter.innerHTML +=
             `
-            <option value="${c}">
-            ${c}
+            <option value="${category}">
+
+            ${category}
+
             </option>
             `;
 
@@ -145,11 +129,6 @@ function renderFilter()
 
 
 
-/*
---------------------------------
-買い物一覧
---------------------------------
-*/
 
 function renderShopping()
 {
@@ -159,6 +138,7 @@ function renderShopping()
         .getElementById(
             "shopping-list"
         );
+
 
 
     area.innerHTML="";
@@ -172,24 +152,21 @@ function renderShopping()
 
 
 
+
     /*
-    在庫なしのみ
+    在庫なしだけ表示
     */
 
     items =
-        items.filter(
-            item =>
-            !item.stock
-        );
+    items.filter(
+        item =>
+        !item.stock
+    );
 
 
 
 
 
-
-    /*
-    ジャンル絞り込み
-    */
 
     if(
         currentFilter !== "all"
@@ -203,6 +180,7 @@ function renderShopping()
         );
 
     }
+
 
 
 
@@ -237,6 +215,7 @@ function renderShopping()
         item =>
         {
 
+
             const div =
             document.createElement(
                 "div"
@@ -245,12 +224,14 @@ function renderShopping()
 
 
             div.className =
-            "item";
+            "item no-stock";
+
+
 
 
 
             /*
-            タップ購入
+            商品タップで購入
             */
 
             div.onclick =
@@ -270,6 +251,14 @@ function renderShopping()
 
             div.innerHTML =
 `
+<div class="watermark">
+
+買い物
+
+</div>
+
+
+
 <div class="item-info">
 
 
@@ -288,32 +277,18 @@ ${item.category}
 </span>
 
 
-</div>
 
 
+<span class="stock-status">
 
-
-<div class="item-actions">
-
-
-<label class="switch">
-
-
-<input
-type="checkbox"
-onclick="event.stopPropagation()"
->
-
-
-<span class="slider">
+タップして購入完了
 
 </span>
 
 
-</label>
-
 
 </div>
+
 
 `;
 
@@ -335,11 +310,6 @@ onclick="event.stopPropagation()"
 
 
 
-/*
---------------------------------
-購入完了
---------------------------------
-*/
 
 function completeBuy(id)
 {
@@ -391,30 +361,24 @@ function completeBuy(id)
 
 
 
-/*
---------------------------------
-件数
---------------------------------
-*/
-
-function updateShoppingCount()
+function updateCount()
 {
 
     const count =
     getItems()
     .filter(
-        x =>
-        !x.stock
+        item =>
+        !item.stock
     )
     .length;
 
 
 
     const area =
-        document
-        .getElementById(
-            "shopping-count"
-        );
+    document
+    .getElementById(
+        "shopping-count"
+    );
 
 
 
