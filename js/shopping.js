@@ -1,403 +1,94 @@
 document.addEventListener(
-    "DOMContentLoaded",
-    () =>
-    {
-        initShopping();
-    }
+"DOMContentLoaded",
+renderShopping
 );
-
-
-
-let shoppingFilter = "all";
-
-
-
-
-
-
-
-function initShopping()
-{
-
-    const filter =
-    document
-    .getElementById(
-        "filter-category"
-    );
-
-
-
-    if(filter)
-    {
-
-        filter.addEventListener(
-            "change",
-            e =>
-            {
-
-                shoppingFilter =
-                e.target.value;
-
-
-                renderShopping();
-
-            }
-        );
-
-    }
-
-
-
-    renderShopping();
-
-}
-
-
-
-
-
-
-
 
 
 
 function renderShopping()
 {
 
-    renderShoppingFilter();
+let area =
+document
+.getElementById("shopping-list");
 
 
-    const area =
-    document
-    .getElementById(
-        "shopping-list"
-    );
 
+area.innerHTML="";
 
 
-    if(!area)
-    {
-        return;
-    }
 
+let items =
+getItems()
+.filter(
+x=>!x.stock
+);
 
 
-    area.innerHTML="";
 
-
-
-    let items =
-    getItems();
-
-
-
-
-
-
-    /*
-    在庫なしのみ表示
-    */
-
-    items =
-    items.filter(
-        item =>
-        !item.stock
-    );
-
-
-
-
-
-
-    /*
-    フィルター
-    */
-
-    if(
-        shoppingFilter !== "all"
-    )
-    {
-
-        items =
-        items.filter(
-            item =>
-            item.category === shoppingFilter
-        );
-
-    }
-
-
-
-
-
-
-
-
-    if(items.length === 0)
-    {
-
-        area.innerHTML =
-        `
-        <div class="empty">
-
-        買い物はありません
-
-        </div>
-        `;
-
-
-        updateShoppingCount();
-
-        return;
-
-    }
-
-
-
-
-
-
-
-
-
-    items.forEach(
-        item =>
-        {
-
-
-            const div =
-            document.createElement(
-                "div"
-            );
-
-
-
-            div.className =
-            "item no-stock";
-
-
-
-
-
-            /*
-            タップ購入
-            */
-
-            div.onclick =
-            () =>
-            {
-                completeBuy(
-                    item.id
-                );
-            };
-
-
-
-
-
-
-
-            div.innerHTML =
-            `
-
-
-            <div class="item-info">
-
-
-            <span class="item-name">
-
-            ${item.name}
-
-            </span>
-
-
-
-            <span class="item-category">
-
-            ${item.category}
-
-            </span>
-
-
-
-            </div>
-
-
-
-            `;
-
-
-
-            area.appendChild(div);
-
-
-        }
-    );
-
-
-
-    updateShoppingCount();
-
-}
-
-
-
-
-
-
-
-
-
-function renderShoppingFilter()
+items.forEach(
+item =>
 {
 
-    const filter =
-    document
-    .getElementById(
-        "filter-category"
-    );
+
+let div =
+document.createElement("div");
 
 
 
-    if(!filter)
-    {
-        return;
-    }
+div.className =
+"item no-stock";
 
 
 
-    const categories =
-    getCategories();
+div.innerHTML =
+`
+<div class="item-info">
+
+<span class="item-name">
+
+${item.name}
+
+</span>
 
 
+<span class="item-category">
+
+${item.category}
+
+</span>
 
 
-    filter.innerHTML =
-    `
-    <option value="all">
-
-    すべて
-
-    </option>
-    `;
-
-
-
-
-
-    categories.forEach(
-        category =>
-        {
-
-            filter.innerHTML +=
-            `
-            <option value="${category}">
-
-            ${category}
-
-            </option>
-            `;
-
-        }
-    );
-
-
-
-    filter.value =
-    shoppingFilter;
-
-}
+</div>
+`;
 
 
 
 
-
-
-
-
-
-
-function completeBuy(id)
+div.onclick =
+() =>
 {
 
-    const items =
-    getItems();
+item.stock=true;
+
+updateItem(item);
+
+renderShopping();
+
+};
 
 
 
-    const item =
-    items.find(
-        x =>
-        x.id === id
-    );
+area.appendChild(div);
+
+
+});
 
 
 
-    if(!item)
-    {
-        return;
-    }
-
-
-
-
-    item.stock =
-    true;
-
-
-
-    item.shopping =
-    false;
-
-
-
-    updateItem(item);
-
-
-
-    renderShopping();
-
-}
-
-
-
-
-
-
-
-
-
-function updateShoppingCount()
-{
-
-    const area =
-    document
-    .getElementById(
-        "shopping-count"
-    );
-
-
-
-    if(!area)
-    {
-        return;
-    }
-
-
-
-
-    const count =
-    getItems()
-    .filter(
-        item =>
-        !item.stock
-    )
-    .length;
-
-
-
-
-    area.textContent =
-    `買い物 ${count}件`;
+document
+.getElementById("shopping-count")
+.textContent =
+`買い物 ${items.length}件`;
 
 }
