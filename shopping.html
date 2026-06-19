@@ -7,8 +7,9 @@
 
 <meta charset="UTF-8">
 
+
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+content="width=device-width, initial-scale=1.0">
 
 
 <title>
@@ -24,26 +25,46 @@ href="css/style.css">
 
 
 
+
+
 <body>
 
 
 
-<header>
+
+
+<header class="header">
+
+
+
+
+
+<div class="header-left">
 
 
 <h1>
+
 🛒 買い物リスト
+
 </h1>
 
 
+</div>
 
 
-<nav class="small-nav">
+
+
+
+
+
+<nav class="header-nav">
 
 
 <a href="index.html">
 
-🏠 在庫管理
+
+🏠 在庫管理へ戻る
+
 
 </a>
 
@@ -54,8 +75,14 @@ href="css/style.css">
 
 
 
-<div class="summary">
 
+<div class="header-right">
+
+
+<span class="shopping-link">
+
+
+🛒
 
 <span id="shopping-count">
 
@@ -64,7 +91,15 @@ href="css/style.css">
 </span>
 
 
+</span>
+
+
+
 </div>
+
+
+
+
 
 
 </header>
@@ -74,15 +109,24 @@ href="css/style.css">
 
 
 
-<main>
 
 
 
-<section class="shopping-card">
+<main class="container">
 
 
 
-<div class="list-header">
+
+
+
+<section class="card shopping-card">
+
+
+
+
+
+<div class="card-header">
+
 
 
 <h2>
@@ -90,6 +134,8 @@ href="css/style.css">
 買うもの
 
 </h2>
+
+
 
 
 
@@ -106,6 +152,8 @@ href="css/style.css">
 </select>
 
 
+
+
 </div>
 
 
@@ -113,13 +161,25 @@ href="css/style.css">
 
 
 
-<div id="shopping-list">
+
+
+<div id="shopping-list"
+class="inventory-list">
+
 
 </div>
+
+
+
 
 
 
 </section>
+
+
+
+
+
 
 
 </main>
@@ -129,11 +189,15 @@ href="css/style.css">
 
 
 
+
 <footer>
+
 
 GitHub Pages
 
+
 </footer>
+
 
 
 
@@ -143,6 +207,8 @@ GitHub Pages
 <script src="js/storage.js"></script>
 
 <script src="js/shopping.js"></script>
+
+
 
 
 </body>
