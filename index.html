@@ -29,14 +29,16 @@
 <div class="summary">
 
 <span id="total-items">
-在庫 0件
+登録 0件
 </span>
+
 
 <span id="shopping-count">
 買い物 0件
 </span>
 
 </div>
+
 
 </header>
 
@@ -50,9 +52,8 @@
 
 
 <h2>
-登録
+商品登録
 </h2>
-
 
 
 <div class="form">
@@ -60,35 +61,15 @@
 
 <input
 id="item-name"
-type="text"
 placeholder="商品名"
-/>
+>
+
 
 
 <select id="item-category">
 
-
-<option value="食品">
-食品
-</option>
-
-
-<option value="飲料">
-飲料
-</option>
-
-
-<option value="日用品">
-日用品
-</option>
-
-
-<option value="その他">
-その他
-</option>
-
-
 </select>
+
 
 
 <button id="add-button">
@@ -107,6 +88,73 @@ placeholder="商品名"
 
 
 
+<section class="category-card">
+
+
+<h2>
+ジャンル管理
+</h2>
+
+
+<div class="form">
+
+
+<input
+id="new-category"
+placeholder="新しいジャンル"
+>
+
+
+<button id="add-category">
+
+追加
+
+</button>
+
+
+</div>
+
+
+
+<div id="category-list">
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<section class="filter-card">
+
+
+<h2>
+表示フィルター
+</h2>
+
+
+<select id="filter-category">
+
+<option value="all">
+
+すべて
+
+</option>
+
+
+</select>
+
+
+</section>
+
+
+
+
+
+
 <section class="list-card">
 
 
@@ -115,8 +163,7 @@ placeholder="商品名"
 </h2>
 
 
-<div
-id="inventory-list">
+<div id="inventory-list">
 
 </div>
 
@@ -135,8 +182,7 @@ id="inventory-list">
 </h2>
 
 
-<div
-id="shopping-list">
+<div id="shopping-list">
 
 </div>
 
@@ -155,7 +201,6 @@ id="shopping-list">
 GitHub Pages Edition
 
 </footer>
-
 
 
 <script src="js/storage.js"></script>
