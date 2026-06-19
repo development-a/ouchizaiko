@@ -1,60 +1,73 @@
 const STORAGE_KEY =
-    "homeInventoryManager";
+"homeInventoryManager";
 
 
 
-/*
---------------------------------
-初期ジャンル
---------------------------------
-*/
 
-const DEFAULT_CATEGORIES = [
-
-    "食品",
-    "飲料",
-    "日用品",
-    "その他"
-
+const DEFAULT_CATEGORIES =
+[
+"食品",
+"飲料",
+"日用品",
+"その他"
 ];
 
 
 
 
 
-/*
---------------------------------
-全データ取得
---------------------------------
-*/
-
 function getData()
 {
 
-    const data =
-        localStorage.getItem(
-            STORAGE_KEY
-        );
+
+const data =
+localStorage.getItem(
+STORAGE_KEY
+);
 
 
 
-    if(!data)
-    {
+if(!data)
+{
 
-        return {
+return {
 
-            items:[],
+items:[],
 
-            categories:
-                [...DEFAULT_CATEGORIES]
+categories:
+[
+...DEFAULT_CATEGORIES
+]
 
-        };
+};
 
-    }
+}
 
 
 
-    return JSON.parse(data);
+try
+{
+
+return JSON.parse(data);
+
+}
+
+catch(e)
+{
+
+return {
+
+items:[],
+
+categories:
+[
+...DEFAULT_CATEGORIES
+]
+
+};
+
+}
+
 
 }
 
@@ -62,22 +75,18 @@ function getData()
 
 
 
-/*
---------------------------------
-全データ保存
---------------------------------
-*/
+
 
 function saveData(data)
 {
 
-    localStorage.setItem(
+localStorage.setItem(
 
-        STORAGE_KEY,
+STORAGE_KEY,
 
-        JSON.stringify(data)
+JSON.stringify(data)
 
-    );
+);
 
 }
 
@@ -85,16 +94,12 @@ function saveData(data)
 
 
 
-/*
---------------------------------
-商品取得
---------------------------------
-*/
+
 
 function getItems()
 {
 
-    return getData().items;
+return getData().items;
 
 }
 
@@ -102,40 +107,36 @@ function getItems()
 
 
 
-/*
---------------------------------
-商品追加
---------------------------------
-*/
+
 
 function addItem(item)
 {
 
-    const data =
-        getData();
+
+const data =
+getData();
 
 
 
-    item.id =
-        Date.now();
+
+item.id =
+Date.now()
++
+Math.floor(
+Math.random()*1000
+);
 
 
 
-    item.stock =
-        true;
+item.stock=true;
 
 
 
-    item.shopping =
-        false;
+data.items.push(item);
 
 
 
-    data.items.push(item);
-
-
-
-    saveData(data);
+saveData(data);
 
 }
 
@@ -144,39 +145,34 @@ function addItem(item)
 
 
 
-/*
---------------------------------
-商品更新
---------------------------------
-*/
 
 function updateItem(item)
 {
 
-    const data =
-        getData();
+
+const data =
+getData();
 
 
 
-    const index =
-        data.items.findIndex(
-            x =>
-            x.id === item.id
-        );
+const index =
+data.items.findIndex(
+x =>
+x.id === item.id
+);
 
 
 
-    if(index !== -1)
-    {
+if(index !== -1)
+{
 
-        data.items[index] =
-            item;
+data.items[index]=item;
 
-    }
-
+}
 
 
-    saveData(data);
+
+saveData(data);
 
 }
 
@@ -185,29 +181,25 @@ function updateItem(item)
 
 
 
-/*
---------------------------------
-商品削除
---------------------------------
-*/
 
 function deleteItem(id)
 {
 
-    const data =
-        getData();
+
+const data =
+getData();
 
 
 
-    data.items =
-        data.items.filter(
-            x =>
-            x.id !== id
-        );
+data.items =
+data.items.filter(
+x =>
+x.id !== id
+);
 
 
 
-    saveData(data);
+saveData(data);
 
 }
 
@@ -215,75 +207,65 @@ function deleteItem(id)
 
 
 
-
-/*
---------------------------------
-並び替え
---------------------------------
-*/
 
 
 function moveItem(
-    id,
-    direction
+id,
+direction
 )
 {
 
-    const data =
-        getData();
+
+const data =
+getData();
 
 
 
-    const items =
-        data.items;
+const items =
+data.items;
 
 
 
-    const index =
-        items.findIndex(
-            x =>
-            x.id === id
-        );
+const index =
+items.findIndex(
+x =>
+x.id===id
+);
 
 
 
-    if(index === -1)
-    {
-        return;
-    }
+if(index===-1)
+return;
 
 
 
-
-    const target =
-        index + direction;
-
-
-
-    if(
-        target < 0 ||
-        target >= items.length
-    )
-    {
-        return;
-    }
+const target =
+index + direction;
 
 
 
-
-    [
-        items[index],
-        items[target]
-
-    ] =
-    [
-        items[target],
-        items[index]
-    ];
+if(
+target < 0 ||
+target >= items.length
+)
+return;
 
 
 
-    saveData(data);
+[
+items[index],
+items[target]
+
+]=
+
+[
+items[target],
+items[index]
+];
+
+
+
+saveData(data);
 
 }
 
@@ -292,17 +274,13 @@ function moveItem(
 
 
 
-/*
---------------------------------
-ジャンル取得
---------------------------------
-*/
+
 
 function getCategories()
 {
 
-    return getData()
-        .categories;
+return getData()
+.categories;
 
 }
 
@@ -311,35 +289,29 @@ function getCategories()
 
 
 
-/*
---------------------------------
-ジャンル追加
---------------------------------
-*/
 
 function addCategory(name)
 {
 
-    const data =
-        getData();
+
+const data =
+getData();
 
 
 
-    if(
-        name === "" ||
-        data.categories.includes(name)
-    )
-    {
-        return;
-    }
+if(
+!name ||
+data.categories.includes(name)
+)
+return;
 
 
 
-    data.categories.push(name);
+data.categories.push(name);
 
 
 
-    saveData(data);
+saveData(data);
 
 }
 
@@ -349,51 +321,55 @@ function addCategory(name)
 
 
 
-/*
---------------------------------
-ジャンル削除
---------------------------------
-*/
-
 function deleteCategory(name)
 {
 
-    const data =
-        getData();
+
+const data =
+getData();
 
 
 
-    data.categories =
-        data.categories.filter(
-            x =>
-            x !== name
-        );
+if(
+!data.categories.includes(
+"その他"
+)
+)
+{
+
+data.categories.push(
+"その他"
+);
+
+}
 
 
 
-    /*
-    削除したジャンルの商品は
-    その他へ移動
-    */
 
-
-    data.items.forEach(
-        item =>
-        {
-
-            if(item.category === name)
-            {
-
-                item.category =
-                    "その他";
-
-            }
-
-        }
-    );
+data.categories =
+data.categories.filter(
+x =>
+x !== name
+);
 
 
 
-    saveData(data);
+
+data.items.forEach(
+item =>
+{
+
+if(item.category===name)
+{
+
+item.category="その他";
+
+}
+
+});
+
+
+
+saveData(data);
 
 }
