@@ -2,21 +2,26 @@ document.addEventListener(
     "DOMContentLoaded",
     () =>
     {
-        setupEvents();
+        init();
 
-        render();
     }
 );
 
 
 
+let currentFilter = "all";
+
+
+
+
+
 /*
 --------------------------------
-イベント
+初期化
 --------------------------------
 */
 
-function setupEvents()
+function init()
 {
 
     document
@@ -25,18 +30,7 @@ function setupEvents()
     )
     .addEventListener(
         "click",
-        addNewItem
-    );
-
-
-
-    document
-    .getElementById(
-        "add-category"
-    )
-    .addEventListener(
-        "click",
-        addNewCategory
+        addItemForm
     );
 
 
@@ -47,21 +41,61 @@ function setupEvents()
     )
     .addEventListener(
         "change",
-        render
+        e =>
+        {
+            currentFilter =
+                e.target.value;
+
+            renderInventory();
+
+        }
     );
+
+
+
+    render();
 
 }
 
 
 
 
+
+
+
+
 /*
 --------------------------------
-商品追加
+全体表示
 --------------------------------
 */
 
-function addNewItem()
+function render()
+{
+
+    renderCategorySelect();
+
+    renderInventory();
+
+    renderShopping();
+
+    updateSummary();
+
+}
+
+
+
+
+
+
+
+/*
+--------------------------------
+登録
+--------------------------------
+*/
+
+function addItemForm()
 {
 
     const name =
@@ -82,12 +116,8 @@ function addNewItem()
 
 
 
-    if(name === "")
+    if(name==="")
     {
-        alert(
-            "商品名を入力してください"
-        );
-
         return;
     }
 
@@ -113,72 +143,6 @@ function addNewItem()
 
 
     render();
-
-}
-
-
-
-
-
-
-/*
---------------------------------
-ジャンル追加
---------------------------------
-*/
-
-function addNewCategory()
-{
-
-    const input =
-        document
-        .getElementById(
-            "new-category"
-        );
-
-
-
-    addCategory(
-        input.value
-    );
-
-
-
-    input.value="";
-
-
-    render();
-
-}
-
-
-
-
-
-
-/*
---------------------------------
-全体描画
---------------------------------
-*/
-
-function render()
-{
-
-    const items =
-        getItems();
-
-
-
-    renderCategorySelect();
-
-    renderCategories();
-
-    renderInventory(items);
-
-    renderShopping(items);
-
-    updateSummary(items);
 
 }
 
@@ -219,6 +183,8 @@ function renderCategorySelect()
 
     select.innerHTML="";
 
+
+
     filter.innerHTML =
     `
     <option value="all">
@@ -233,7 +199,6 @@ function renderCategorySelect()
         c =>
         {
 
-
             select.innerHTML +=
             `
             <option>
@@ -245,92 +210,22 @@ function renderCategorySelect()
 
             filter.innerHTML +=
             `
-            <option>
+            <option value="${c}">
             ${c}
             </option>
             `;
 
-        }
-    );
-
-}
-
-
-
-
-
-/*
---------------------------------
-ジャンル管理
---------------------------------
-*/
-
-function renderCategories()
-{
-
-    const area =
-        document
-        .getElementById(
-            "category-list"
-        );
-
-
-
-    area.innerHTML="";
-
-
-
-    getCategories()
-    .forEach(
-        c =>
-        {
-
-            area.innerHTML +=
-`
-<div class="category-item">
-
-
-<span>
-${c}
-</span>
-
-
-<button
-class="category-delete"
-onclick="removeCategory('${c}')">
-
-削除
-
-</button>
-
-
-</div>
-`;
 
         }
     );
 
-}
 
 
-
-function removeCategory(name)
-{
-
-    if(
-        confirm(
-            "ジャンル削除しますか？"
-        )
-    )
-    {
-
-        deleteCategory(name);
-
-        render();
-
-    }
+    filter.value =
+        currentFilter;
 
 }
+
 
 
 
@@ -339,11 +234,11 @@ function removeCategory(name)
 
 /*
 --------------------------------
-在庫表示
+在庫一覧
 --------------------------------
 */
 
-function renderInventory(items)
+function renderInventory()
 {
 
     const area =
@@ -358,26 +253,23 @@ function renderInventory(items)
 
 
 
-    const filter =
-        document
-        .getElementById(
-            "filter-category"
-        )
-        .value;
+    let items =
+        getItems();
 
 
 
-    if(filter !== "all")
+    if(
+        currentFilter !== "all"
+    )
     {
 
         items =
             items.filter(
-                x =>
-                x.category === filter
+                item =>
+                item.category === currentFilter
             );
 
     }
-
 
 
 
@@ -399,89 +291,71 @@ function renderInventory(items)
 
 
 
-    const groups =
-        {};
-
-
-
     items.forEach(
         item =>
         {
 
-            if(!groups[item.category])
-            {
-                groups[item.category]=[];
-            }
 
-
-            groups[item.category]
-            .push(item);
-
-        }
-    );
+            const div =
+                document.createElement(
+                    "div"
+                );
 
 
 
+            div.className =
+                "item";
 
 
-    Object.keys(groups)
-    .forEach(
-        category =>
-        {
+            div.draggable =
+                true;
 
 
-            area.innerHTML +=
+            div.dataset.id =
+                item.id;
+
+
+
+            div.ondragstart =
+                dragStart;
+
+
+
+            div.ondragover =
+                dragOver;
+
+
+
+            div.ondrop =
+                dropItem;
+
+
+
+
+
+            div.innerHTML =
 `
-<div class="group-title">
-
-${category}
-
-</div>
-`;
-
-
-
-            groups[category]
-            .forEach(
-                item =>
-                {
-
-
-const status =
-item.stock
-?
-`
-<span class="status stock-ok">
-在庫あり
-</span>
-`
-:
-`
-<span class="status stock-ng">
-在庫なし
-</span>
-`;
-
-
-
-
-area.innerHTML +=
-`
-<div class="item">
-
-
 <div class="item-info">
 
 
 <span class="item-name">
-${item.name}
+
+☰ ${item.name}
+
 </span>
 
 
-${status}
+
+<span class="item-category">
+
+${item.category}
+
+</span>
+
 
 
 </div>
+
 
 
 
@@ -490,33 +364,22 @@ ${status}
 
 
 
-<button
-class="stock-button ${item.stock ? "stock-off":"stock-on"}"
-onclick="toggleStock(${item.id})">
-
-${item.stock ? "在庫なし":"在庫あり"}
-
-</button>
 
 
-
-<button
-class="move-button"
-onclick="move(${item.id},-1)">
-
-↑
-
-</button>
+<label class="switch">
 
 
+<input
+type="checkbox"
+${item.stock ? "checked":""}
+onchange="toggleStock(${item.id})">
 
-<button
-class="move-button"
-onclick="move(${item.id},1)">
 
-↓
+<span class="slider"></span>
 
-</button>
+
+</label>
+
 
 
 
@@ -532,13 +395,11 @@ onclick="removeItem(${item.id})">
 
 
 </div>
-
-
-</div>
 `;
 
-                }
-            );
+
+
+            area.appendChild(div);
 
 
         }
@@ -550,9 +411,11 @@ onclick="removeItem(${item.id})">
 
 
 
+
+
 /*
 --------------------------------
-在庫切替
+スイッチ切替
 --------------------------------
 */
 
@@ -598,17 +461,57 @@ function toggleStock(id)
 
 /*
 --------------------------------
-並び替え
+ドラッグ開始
 --------------------------------
 */
 
-function move(id,direction)
+let dragId = null;
+
+
+
+function dragStart(e)
 {
 
-    moveItem(
-        id,
-        direction
+    dragId =
+        e.currentTarget.dataset.id;
+
+}
+
+
+
+
+
+
+function dragOver(e)
+{
+
+    e.preventDefault();
+
+}
+
+
+
+
+
+
+
+function dropItem(e)
+{
+
+    e.preventDefault();
+
+
+
+    const target =
+        e.currentTarget.dataset.id;
+
+
+
+    reorderItems(
+        Number(dragId),
+        Number(target)
     );
+
 
 
     render();
@@ -620,27 +523,61 @@ function move(id,direction)
 
 
 
+
 /*
 --------------------------------
-削除
+並び替え
 --------------------------------
 */
 
-function removeItem(id)
+function reorderItems(
+    from,
+    to
+)
 {
 
-    if(
-        confirm(
-            "削除しますか？"
-        )
-    )
-    {
+    const data =
+        getData();
 
-        deleteItem(id);
 
-        render();
 
-    }
+    const items =
+        data.items;
+
+
+
+    const fromIndex =
+        items.findIndex(
+            x =>
+            x.id===from
+        );
+
+
+    const toIndex =
+        items.findIndex(
+            x =>
+            x.id===to
+        );
+
+
+
+    const move =
+        items.splice(
+            fromIndex,
+            1
+        )[0];
+
+
+
+    items.splice(
+        toIndex,
+        0,
+        move
+    );
+
+
+
+    saveData(data);
 
 }
 
@@ -649,13 +586,14 @@ function removeItem(id)
 
 
 
+
 /*
 --------------------------------
-買い物
+買い物リスト
 --------------------------------
 */
 
-function renderShopping(items)
+function renderShopping()
 {
 
     const area =
@@ -665,13 +603,13 @@ function renderShopping(items)
         );
 
 
-
     area.innerHTML="";
 
 
 
     const list =
-        items.filter(
+        getItems()
+        .filter(
             x =>
             x.shopping
         );
@@ -718,14 +656,46 @@ function renderShopping(items)
 
 
 
+
+/*
+--------------------------------
+削除
+--------------------------------
+*/
+
+function removeItem(id)
+{
+
+    if(confirm("削除しますか？"))
+    {
+
+        deleteItem(id);
+
+        render();
+
+    }
+
+}
+
+
+
+
+
+
+
 /*
 --------------------------------
 件数
 --------------------------------
 */
 
-function updateSummary(items)
+function updateSummary()
 {
+
+    const items =
+        getItems();
+
+
 
     document
     .getElementById(
@@ -736,20 +706,15 @@ function updateSummary(items)
 
 
 
-    const count =
-        items.filter(
-            x =>
-            x.shopping
-        )
-        .length;
-
-
-
     document
     .getElementById(
         "shopping-count"
     )
     .textContent =
-    `買い物 ${count}件`;
+    `買い物 ${
+        items.filter(
+            x=>x.shopping
+        ).length
+    }件`;
 
 }
