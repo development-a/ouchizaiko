@@ -10,11 +10,9 @@ document.addEventListener(
 
 
 
-
-
 /*
 --------------------------------
-イベント設定
+イベント
 --------------------------------
 */
 
@@ -31,8 +29,6 @@ function setupEvents()
     );
 
 }
-
-
 
 
 
@@ -54,16 +50,6 @@ function addNewItem()
         .value;
 
 
-
-    const count =
-        document
-        .getElementById(
-            "item-count"
-        )
-        .value;
-
-
-
     const category =
         document
         .getElementById(
@@ -73,22 +59,10 @@ function addNewItem()
 
 
 
-    const limit =
-        document
-        .getElementById(
-            "item-limit"
-        )
-        .value;
-
-
-
-    if(
-        name === "" ||
-        count === ""
-    )
+    if(name === "")
     {
         alert(
-            "商品名と数量を入力してください"
+            "商品名を入力してください"
         );
 
         return;
@@ -101,17 +75,20 @@ function addNewItem()
 
         name:name,
 
-        count:Number(count),
-
         category:category,
 
-        limit:limit
+        stock:true
 
     });
 
 
 
-    clearInput();
+    document
+    .getElementById(
+        "item-name"
+    )
+    .value="";
+
 
 
     render();
@@ -125,7 +102,7 @@ function addNewItem()
 
 /*
 --------------------------------
-表示更新
+全体表示
 --------------------------------
 */
 
@@ -136,16 +113,16 @@ function render()
         getItems();
 
 
-
     renderInventory(items);
+
 
     renderShopping(items);
 
-    renderExpire(items);
 
     updateSummary(items);
 
 }
+
 
 
 
@@ -162,7 +139,8 @@ function renderInventory(items)
 {
 
     const area =
-        document.getElementById(
+        document
+        .getElementById(
             "inventory-list"
         );
 
@@ -175,13 +153,15 @@ function renderInventory(items)
     {
 
         area.innerHTML =
-            `<div class="empty">
-            在庫がありません
-            </div>`;
+        `
+        <div class="empty">
+        登録なし
+        </div>
+        `;
 
         return;
-    }
 
+    }
 
 
 
@@ -189,11 +169,10 @@ function renderInventory(items)
         item =>
         {
 
-
             const div =
-            document.createElement(
-                "div"
-            );
+                document.createElement(
+                    "div"
+                );
 
 
             div.className =
@@ -201,43 +180,55 @@ function renderInventory(items)
 
 
 
+            const status =
+                item.stock
+                ?
+                `
+                <span class="status stock-ok">
+                在庫あり
+                </span>
+                `
+                :
+                `
+                <span class="status stock-ng">
+                在庫なし
+                </span>
+                `;
+
+
+
             div.innerHTML =
 `
 <div class="item-info">
+
 
 <span class="item-name">
 ${item.name}
 </span>
 
-<span>
-残り ${item.count}
-</span>
 
 <span class="item-category">
 ${item.category}
 </span>
+
+
+${status}
+
 
 </div>
 
 
 <div class="item-actions">
 
-<button
-class="small-button buy"
-onclick="useItem(${item.id})">
 
-使用
+<button
+class="small-button stock"
+onclick="toggleStock(${item.id})">
+
+${item.stock ? "在庫なし" : "在庫あり"}
 
 </button>
 
-
-<button
-class="small-button"
-onclick="addShopping(${item.id})">
-
-買物
-
-</button>
 
 
 <button
@@ -247,6 +238,7 @@ onclick="removeItem(${item.id})">
 削除
 
 </button>
+
 
 </div>
 `;
@@ -268,11 +260,11 @@ onclick="removeItem(${item.id})">
 
 /*
 --------------------------------
-使用
+在庫切替
 --------------------------------
 */
 
-function useItem(id)
+function toggleStock(id)
 {
 
     const items =
@@ -283,19 +275,40 @@ function useItem(id)
     const item =
         items.find(
             x =>
-            x.id===id
+            x.id === id
         );
 
 
 
-    if(item && item.count>0)
+    if(!item)
     {
-
-        item.count--;
-
-        updateItem(item);
-
+        return;
     }
+
+
+
+    item.stock =
+        !item.stock;
+
+
+
+    /*
+      在庫なしの場合
+      買い物リストへ
+    */
+
+    if(item.stock)
+    {
+        item.shopping = false;
+    }
+    else
+    {
+        item.shopping = true;
+    }
+
+
+
+    updateItem(item);
 
 
 
@@ -345,25 +358,14 @@ function removeItem(id)
 --------------------------------
 */
 
-function addShopping(id)
-{
-
-    toggleShopping(id);
-
-    render();
-
-}
-
-
-
 function renderShopping(items)
 {
 
     const area =
-        document.getElementById(
+        document
+        .getElementById(
             "shopping-list"
         );
-
 
 
     area.innerHTML="";
@@ -384,7 +386,7 @@ function renderShopping(items)
         area.innerHTML =
         `
         <div class="empty">
-        買い物リストは空です
+        買い物はありません
         </div>
         `;
 
@@ -417,106 +419,9 @@ function renderShopping(items)
 
 
 
-
 /*
 --------------------------------
-期限チェック
---------------------------------
-*/
-
-function renderExpire(items)
-{
-
-    const area =
-        document.getElementById(
-            "expire-list"
-        );
-
-
-    area.innerHTML="";
-
-
-
-    const today =
-        new Date();
-
-
-
-    const warning =
-        items.filter(
-            item =>
-            {
-
-                if(!item.limit)
-                {
-                    return false;
-                }
-
-
-                const date =
-                    new Date(
-                        item.limit
-                    );
-
-
-                const diff =
-                    (date-today)
-                    /
-                    (1000*60*60*24);
-
-
-                return diff <= 3;
-
-            }
-        );
-
-
-
-    if(warning.length===0)
-    {
-
-        area.innerHTML =
-        `
-        <div class="empty">
-        問題ありません
-        </div>
-        `;
-
-        return;
-
-    }
-
-
-
-    warning.forEach(
-        item =>
-        {
-
-            area.innerHTML +=
-`
-<div class="expire-warning">
-
-⚠ ${item.name}
-
-期限:
-${item.limit}
-
-</div>
-`;
-
-        }
-    );
-
-}
-
-
-
-
-
-
-/*
---------------------------------
-件数表示
+件数
 --------------------------------
 */
 
@@ -528,14 +433,14 @@ function updateSummary(items)
         "total-items"
     )
     .textContent =
-        `在庫 ${items.length}件`;
+        `登録 ${items.length}件`;
 
 
 
     const count =
         items.filter(
-            x =>
-            x.shopping
+            item =>
+            item.shopping
         )
         .length;
 
@@ -547,43 +452,5 @@ function updateSummary(items)
     )
     .textContent =
         `買い物 ${count}件`;
-
-}
-
-
-
-
-
-
-/*
---------------------------------
-入力クリア
---------------------------------
-*/
-
-function clearInput()
-{
-
-    document
-    .getElementById(
-        "item-name"
-    )
-    .value="";
-
-
-
-    document
-    .getElementById(
-        "item-count"
-    )
-    .value="";
-
-
-
-    document
-    .getElementById(
-        "item-limit"
-    )
-    .value="";
 
 }
