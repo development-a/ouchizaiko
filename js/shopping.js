@@ -4,8 +4,11 @@ initShopping
 );
 
 
-
 let shoppingFilter="all";
+
+let shoppingDragId=null;
+
+let shoppingPlaceholder=null;
 
 
 
@@ -19,24 +22,18 @@ document
 .getElementById("shopping-filter")
 ?.addEventListener(
 "change",
-e =>
-{
+e=>{
 
-shoppingFilter =
-e.target.value;
-
+shoppingFilter=e.target.value;
 
 renderShopping();
 
 });
 
 
-
 renderShopping();
 
 }
-
-
 
 
 
@@ -51,45 +48,32 @@ function renderShopping()
 renderShoppingFilter();
 
 
-
-
 const area =
 document
 .getElementById("shopping-list");
-
-
-
-if(!area)
-return;
-
 
 
 area.innerHTML="";
 
 
 
-
-
-
 let items =
 getItems()
 .filter(
-item =>
-item.stock === false
+x=>x.stock===false
 );
 
 
 
-
-
-
-if(shoppingFilter !== "all")
+if(
+shoppingFilter!=="all"
+)
 {
 
 items =
 items.filter(
-item =>
-item.category === shoppingFilter
+x=>
+x.category===shoppingFilter
 );
 
 }
@@ -97,33 +81,22 @@ item.category === shoppingFilter
 
 
 
-
-
-
-
-if(items.length === 0)
+if(items.length===0)
 {
 
-area.innerHTML =
-`
+area.innerHTML=
 
+`
 <div class="empty">
 
 買うものはありません
 
 </div>
-
 `;
-
-
-
-updateShoppingCount();
-
 
 return;
 
 }
-
 
 
 
@@ -131,7 +104,7 @@ return;
 
 
 items.forEach(
-item =>
+item=>
 {
 
 
@@ -140,14 +113,16 @@ document.createElement("div");
 
 
 
-card.className =
-"item";
+card.className="item";
+
+card.draggable=true;
+
+card.dataset.id=item.id;
 
 
 
+card.innerHTML=
 
-
-card.innerHTML =
 `
 
 <div class="item-info">
@@ -168,7 +143,6 @@ ${item.category}
 </span>
 
 
-
 </div>
 
 `;
@@ -179,36 +153,124 @@ ${item.category}
 
 
 
+// タップで購入済み
 
-
-/*
---------------------------------
-タップ
-購入済みに戻す
---------------------------------
-*/
-
-
-card.onclick =
-() =>
+card.onclick=()=>
 {
 
-
-item.stock = true;
-
-
+item.stock=true;
 
 updateItem(item);
 
-
-
 renderShopping();
-
-
 
 };
 
 
+
+
+
+
+
+// ドラッグ開始
+
+card.addEventListener(
+"dragstart",
+()=>{
+
+shoppingDragId=item.id;
+
+createShoppingPlaceholder();
+
+});
+
+
+
+
+
+
+card.addEventListener(
+"dragover",
+e=>{
+
+e.preventDefault();
+
+
+const rect =
+card.getBoundingClientRect();
+
+
+if(
+e.clientY <
+rect.top + rect.height/2
+)
+
+{
+
+card.before(
+shoppingPlaceholder
+);
+
+}
+
+else
+{
+
+card.after(
+shoppingPlaceholder
+);
+
+}
+
+});
+
+
+
+
+
+
+
+card.addEventListener(
+"drop",
+e=>{
+
+e.preventDefault();
+
+
+const target =
+shoppingPlaceholder.previousElementSibling;
+
+
+if(target)
+{
+
+moveShoppingItem(
+shoppingDragId,
+Number(
+target.dataset.id
+)
+);
+
+}
+
+
+renderShopping();
+
+});
+
+
+
+
+
+
+
+card.addEventListener(
+"dragend",
+()=>{
+
+removeShoppingPlaceholder();
+
+});
 
 
 
@@ -221,15 +283,115 @@ area.appendChild(card);
 
 
 
-
-
 updateShoppingCount();
-
 
 }
 
 
 
+
+
+
+
+
+function createShoppingPlaceholder()
+{
+
+if(shoppingPlaceholder)
+return;
+
+
+shoppingPlaceholder =
+document.createElement("div");
+
+
+shoppingPlaceholder.className =
+"drag-placeholder";
+
+
+shoppingPlaceholder.textContent =
+"----------";
+
+}
+
+
+
+
+
+
+function removeShoppingPlaceholder()
+{
+
+if(shoppingPlaceholder)
+{
+
+shoppingPlaceholder.remove();
+
+shoppingPlaceholder=null;
+
+}
+
+}
+
+
+
+
+
+
+
+function moveShoppingItem(
+from,
+to
+)
+{
+
+
+const data=getData();
+
+const items=data.items;
+
+
+
+const fromIndex =
+items.findIndex(
+x=>x.id===from
+);
+
+
+const toIndex =
+items.findIndex(
+x=>x.id===to
+);
+
+
+
+if(
+fromIndex===-1 ||
+toIndex===-1
+)
+return;
+
+
+
+const move =
+items.splice(
+fromIndex,
+1
+)[0];
+
+
+
+items.splice(
+toIndex,
+0,
+move
+);
+
+
+
+saveData(data);
+
+}
 
 
 
@@ -241,46 +403,34 @@ function renderShoppingFilter()
 
 
 const filter =
-document
-.getElementById("shopping-filter");
+document.getElementById(
+"shopping-filter"
+);
 
 
+filter.innerHTML=
 
-if(!filter)
-return;
-
-
-
-filter.innerHTML =
 `
-
 <option value="all">
 
 すべて
 
 </option>
-
 `;
-
-
-
-
 
 
 
 getCategories()
 .forEach(
-category =>
+c=>
 {
 
-
-filter.innerHTML +=
+filter.innerHTML+=
 
 `
+<option value="${c}">
 
-<option value="${category}">
-
-${category}
+${c}
 
 </option>
 
@@ -289,17 +439,11 @@ ${category}
 });
 
 
-
-
-
-filter.value =
+filter.value=
 shoppingFilter;
 
 
 }
-
-
-
 
 
 
@@ -313,29 +457,16 @@ function updateShoppingCount()
 const count =
 getItems()
 .filter(
-item =>
-item.stock === false
+x=>!x.stock
 )
 .length;
 
 
 
-
-
-const target =
 document
-.getElementById("shopping-count");
-
-
-
-if(target)
-{
-
-target.textContent =
+.getElementById("shopping-count")
+.textContent=
 
 `買い物 ${count}件`;
-
-}
-
 
 }
