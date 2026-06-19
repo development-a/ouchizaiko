@@ -28,6 +28,8 @@ body{
 
 
 
+
+
 header{
 
     background:#2563eb;
@@ -38,11 +40,19 @@ header{
 
     display:flex;
 
-    align-items:center;
-
     justify-content:space-between;
 
+    align-items:center;
+
     gap:20px;
+
+}
+
+
+
+header h1{
+
+    font-size:24px;
 
 }
 
@@ -59,6 +69,18 @@ header a{
     padding:8px 14px;
 
     border-radius:20px;
+
+}
+
+
+
+
+
+nav{
+
+    display:flex;
+
+    gap:10px;
 
 }
 
@@ -89,6 +111,7 @@ header a{
     font-weight:bold;
 
 }
+
 
 
 
@@ -141,11 +164,13 @@ main{
 
 
 
+
 h2{
 
     margin-bottom:15px;
 
 }
+
 
 
 
@@ -162,6 +187,7 @@ h2{
     gap:10px;
 
 }
+
 
 
 
@@ -185,15 +211,16 @@ button{
 
 button{
 
-    cursor:pointer;
-
     background:#2563eb;
 
     color:white;
 
     border:none;
 
+    cursor:pointer;
+
 }
+
 
 
 
@@ -203,23 +230,34 @@ button{
 .item{
 
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-
     background:#f8fafc;
+
 
     padding:15px;
 
-    border-radius:10px;
+
+    border-radius:12px;
 
 
     margin-bottom:10px;
 
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+    cursor:pointer;
+
+
+    transition:.2s;
+
 }
+
 
 
 
@@ -228,6 +266,9 @@ button{
     background:#eef2ff;
 
 }
+
+
+
 
 
 
@@ -269,15 +310,13 @@ button{
 
 
 
-
-
 .item-actions{
 
     display:flex;
 
     align-items:center;
 
-    gap:12px;
+    gap:10px;
 
 }
 
@@ -285,20 +324,16 @@ button{
 
 
 
-
 /*
--------------------------------
+------------------------------
 スイッチ
--------------------------------
+------------------------------
 */
 
 
 .switch{
 
-
     position:relative;
-
-    display:inline-block;
 
     width:52px;
 
@@ -320,17 +355,22 @@ button{
 
     position:absolute;
 
-    cursor:pointer;
-
     inset:0;
+
 
     background:#dc2626;
 
+
     border-radius:30px;
+
+
+    cursor:pointer;
+
 
     transition:.3s;
 
 }
+
 
 
 
@@ -339,15 +379,18 @@ button{
 
     content:"";
 
+
     position:absolute;
 
 
     width:22px;
 
+
     height:22px;
 
 
     left:3px;
+
 
     bottom:3px;
 
@@ -365,12 +408,15 @@ button{
 
 
 
+
+
 .switch input:checked + .slider{
 
 
     background:#16a34a;
 
 }
+
 
 
 
@@ -389,20 +435,30 @@ button{
 
 
 
+
 .delete-button{
 
 
-    width:32px;
+    width:30px;
 
-    height:32px;
+
+    height:30px;
+
 
     padding:0;
 
-    background:#64748b;
 
     border-radius:50%;
 
+
+    background:#64748b;
+
+
+    font-size:14px;
+
 }
+
+
 
 
 
@@ -413,13 +469,17 @@ button{
 
     background:#fff7ed;
 
-    padding:12px;
 
-    border-radius:8px;
+    padding:15px;
 
-    margin-bottom:8px;
 
-    font-weight:bold;
+    border-radius:10px;
+
+
+    margin-bottom:10px;
+
+
+    cursor:pointer;
 
 }
 
@@ -439,18 +499,23 @@ button{
 
     background:#f8fafc;
 
+
     padding:12px;
 
 
-    margin-bottom:10px;
-
     border-radius:8px;
+
+
+    margin-bottom:10px;
 
 }
 
 
 
+
+
 .category-delete{
+
 
     background:#dc2626;
 
@@ -464,15 +529,19 @@ button{
 
 
 
+
+
 .empty{
+
+
+    padding:20px;
 
     text-align:center;
 
     color:#94a3b8;
 
-    padding:20px;
-
 }
+
 
 
 
@@ -480,13 +549,14 @@ button{
 
 footer{
 
+    background:#e2e8f0;
+
     text-align:center;
 
     padding:15px;
 
-    background:#e2e8f0;
-
 }
+
 
 
 
