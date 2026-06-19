@@ -10,8 +10,6 @@ let shoppingFilter="all";
 
 
 
-
-
 function initShopping()
 {
 
@@ -22,9 +20,7 @@ document
 e =>
 {
 
-shoppingFilter =
-e.target.value;
-
+shoppingFilter=e.target.value;
 
 renderShopping();
 
@@ -34,8 +30,6 @@ renderShopping();
 renderShopping();
 
 }
-
-
 
 
 
@@ -52,7 +46,6 @@ document
 .getElementById("shopping-list");
 
 
-
 area.innerHTML="";
 
 
@@ -66,8 +59,6 @@ x=>!x.stock
 
 
 
-
-
 if(
 shoppingFilter!=="all"
 )
@@ -75,36 +66,10 @@ shoppingFilter!=="all"
 
 items =
 items.filter(
-x =>
-x.category===shoppingFilter
+x=>x.category===shoppingFilter
 );
 
 }
-
-
-
-
-
-
-if(items.length===0)
-{
-
-area.innerHTML =
-`
-<div class="empty">
-
-買い物はありません
-
-</div>
-`;
-
-updateCount();
-
-return;
-
-}
-
-
 
 
 
@@ -120,8 +85,7 @@ document.createElement("div");
 
 
 
-div.className =
-"item no-stock";
+div.className="item";
 
 
 
@@ -131,12 +95,13 @@ div.onclick =
 
 item.stock=true;
 
+
 updateItem(item);
+
 
 renderShopping();
 
 };
-
 
 
 
@@ -154,6 +119,7 @@ ${item.name}
 </span>
 
 
+
 <span class="item-category">
 
 ${item.category}
@@ -161,15 +127,14 @@ ${item.category}
 </span>
 
 
-</div>
 
+</div>
 
 `;
 
 
 
 area.appendChild(div);
-
 
 
 });
@@ -195,38 +160,28 @@ document
 
 
 
-if(!filter)
-return;
-
-
-
-const categories =
-getCategories();
+if(!filter)return;
 
 
 
 filter.innerHTML =
 `
 <option value="all">
-
 すべて
-
 </option>
 `;
 
 
 
-
-categories.forEach(
+getCategories()
+.forEach(
 c =>
 {
 
 filter.innerHTML +=
 `
 <option value="${c}">
-
 ${c}
-
 </option>
 `;
 
@@ -234,12 +189,9 @@ ${c}
 
 
 
-filter.value =
-shoppingFilter;
+filter.value=shoppingFilter;
 
 }
-
-
 
 
 
