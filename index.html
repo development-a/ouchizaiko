@@ -19,6 +19,7 @@ content="width=device-width,initial-scale=1.0">
 <link rel="stylesheet"
 href="css/style.css">
 
+
 </head>
 
 
@@ -38,13 +39,13 @@ href="css/style.css">
 
 <nav>
 
-<a href="shopping.html">
-🛒 買い物
+<a href="category.html">
+⚙ ジャンル管理
 </a>
 
 
-<a href="category.html">
-📂 ジャンル
+<a href="shopping.html">
+🛒 買い物
 </a>
 
 
@@ -52,15 +53,22 @@ href="css/style.css">
 
 
 
+
 <div class="summary">
 
 
 <span id="total-items">
-0件
+登録 0件
+</span>
+
+
+<span id="shopping-count">
+買い物 0件
 </span>
 
 
 </div>
+
 
 
 </header>
@@ -70,7 +78,9 @@ href="css/style.css">
 
 
 
+
 <main>
+
 
 
 
@@ -91,10 +101,12 @@ id="item-name"
 placeholder="商品名">
 
 
+
 <select
 id="item-category">
 
 </select>
+
 
 
 <button id="add-button">
@@ -107,6 +119,7 @@ id="item-category">
 </div>
 
 
+
 </section>
 
 
@@ -115,11 +128,15 @@ id="item-category">
 
 
 
-<section class="filter-card">
+
+<section class="list-card">
+
+
+<div class="list-header">
 
 
 <h2>
-ジャンルフィルター
+在庫一覧
 </h2>
 
 
@@ -137,19 +154,9 @@ id="filter-category">
 </select>
 
 
-</section>
+</div>
 
 
-
-
-
-
-<section class="list-card">
-
-
-<h2>
-在庫一覧
-</h2>
 
 
 <div id="inventory-list">
@@ -161,7 +168,11 @@ id="filter-category">
 
 
 
+
+
+
 </main>
+
 
 
 
@@ -171,6 +182,8 @@ id="filter-category">
 GitHub Pages
 
 </footer>
+
+
 
 
 
