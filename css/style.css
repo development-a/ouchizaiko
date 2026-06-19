@@ -813,3 +813,50 @@ margin:8px 0;
 opacity:.5;
 
 }
+
+/* ジャンルボタン小型・右寄せ */
+
+.small-nav{
+
+margin-left:auto;
+
+}
+
+
+
+.small-nav a{
+
+font-size:12px;
+
+padding:5px 10px;
+
+border-radius:15px;
+
+}
+
+
+
+
+/* 買い物件数 */
+
+#shopping-count{
+
+font-size:20px !important;
+
+padding:10px 18px !important;
+
+}
+
+
+
+
+
+/* 買い物ページ専用フィルター */
+
+#shopping-filter{
+
+min-width:130px;
+
+}
+
+
