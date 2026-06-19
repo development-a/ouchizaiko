@@ -1,49 +1,36 @@
 document.addEventListener(
-    "DOMContentLoaded",
-    () =>
-    {
-        init();
-    }
+"DOMContentLoaded",
+init
 );
 
 
-let currentFilter = "all";
 
-let dragId = null;
-
-let placeholder = null;
+let pressTimer;
 
 
 
 function init()
 {
 
-    document
-    .getElementById("add-button")
-    ?.addEventListener(
-        "click",
-        addItemForm
-    );
+document
+.getElementById("add-button")
+.addEventListener(
+"click",
+addItemForm
+);
 
 
-    document
-    .getElementById("filter-category")
-    ?.addEventListener(
-        "change",
-        e =>
-        {
-            currentFilter =
-            e.target.value;
-
-            renderInventory();
-        }
-    );
+document
+.getElementById("filter-category")
+.addEventListener(
+"change",
+render
+);
 
 
-    render();
+render();
 
 }
-
 
 
 
@@ -52,11 +39,11 @@ function init()
 function render()
 {
 
-    renderSelect();
+renderSelect();
 
-    renderInventory();
+renderInventory();
 
-    updateCount();
+updateCount();
 
 }
 
@@ -69,43 +56,42 @@ function render()
 function addItemForm()
 {
 
-    const name =
-    document
-    .getElementById("item-name")
-    .value;
+let name =
+document
+.getElementById("item-name")
+.value;
 
 
-    const category =
-    document
-    .getElementById("item-category")
-    .value;
-
-
-
-    if(name === "")
-    {
-        return;
-    }
+let category =
+document
+.getElementById("item-category")
+.value;
 
 
 
-    addItem(
-    {
-        name:name,
-        category:category
-    });
+if(!name)
+return;
 
 
-    document
-    .getElementById("item-name")
-    .value="";
+
+addItem(
+{
+name,
+category,
+stock:true
+}
+);
 
 
-    render();
+
+document
+.getElementById("item-name")
+.value="";
+
+
+render();
 
 }
-
-
 
 
 
@@ -116,66 +102,32 @@ function addItemForm()
 function renderSelect()
 {
 
-    const categories =
-    getCategories();
+let categories =
+getCategories();
 
 
-    const select =
-    document
-    .getElementById("item-category");
-
-
-    const filter =
-    document
-    .getElementById("filter-category");
+let select =
+document
+.getElementById("item-category");
 
 
 
-    if(!select || !filter)
-    {
-        return;
-    }
+select.innerHTML="";
 
 
 
-    select.innerHTML="";
+categories.forEach(
+c =>
+{
 
+select.innerHTML +=
+`
+<option value="${c}">
+${c}
+</option>
+`;
 
-    filter.innerHTML =
-    `
-    <option value="all">
-    すべて
-    </option>
-    `;
-
-
-
-    categories.forEach(
-        category =>
-        {
-
-            select.innerHTML +=
-            `
-            <option value="${category}">
-            ${category}
-            </option>
-            `;
-
-
-            filter.innerHTML +=
-            `
-            <option value="${category}">
-            ${category}
-            </option>
-            `;
-
-        }
-    );
-
-
-
-    filter.value =
-    currentFilter;
+});
 
 }
 
@@ -190,116 +142,75 @@ function renderSelect()
 function renderInventory()
 {
 
-    const area =
-    document
-    .getElementById("inventory-list");
+let area =
+document
+.getElementById("inventory-list");
 
 
 
-    if(!area)
-    {
-        return;
-    }
+area.innerHTML="";
 
 
 
-    area.innerHTML="";
+let items =
+getItems();
 
 
 
-    let items =
-    getItems();
-
-
-
-
-    if(currentFilter !== "all")
-    {
-
-        items =
-        items.filter(
-            item =>
-            item.category === currentFilter
-        );
-
-    }
+let filter =
+document
+.getElementById("filter-category")
+.value;
 
 
 
 
+if(filter!=="all")
+{
 
+items =
+items.filter(
+x =>
+x.category===filter
+);
 
-    items.forEach(
-        item =>
-        {
-
-
-            const div =
-            document.createElement("div");
-
-
-
-            div.className =
-            item.stock
-            ?
-            "item"
-            :
-            "item no-stock";
-
-
-
-            div.draggable=true;
-
-
-            div.dataset.id =
-            item.id;
-
-
-
-
-            div.ondragstart =
-            dragStart;
-
-
-            div.ondragover =
-            dragOver;
-
-
-            div.ondrop =
-            dropItem;
-
-
-
-
-
-
-            div.onclick =
-            () =>
-            {
-                toggleStock(
-                    item.id
-                );
-            };
-
-
-
-
-
-
-            div.innerHTML =
-`
-${item.stock ? "" :
-`
-<div class="watermark">
-在庫なし
-</div>
-`
 }
 
 
 
-<div class="item-info">
 
+
+
+
+items.forEach(
+item =>
+{
+
+let div =
+document.createElement("div");
+
+
+
+div.className =
+item.stock
+?
+"item"
+:
+"item no-stock";
+
+
+
+
+div.innerHTML =
+`
+<div class="watermark">
+
+在庫なし
+
+</div>
+
+
+<div class="item-info">
 
 <span class="item-name">
 
@@ -317,37 +228,118 @@ ${item.category}
 
 </div>
 
-
-
-
-<div class="item-actions">
-
-
-<button
-class="delete-button"
-onclick="event.stopPropagation();removeItem(${item.id})">
-
-×
-
-</button>
-
-
-</div>
-
 `;
 
 
 
-            area.appendChild(div);
 
 
-        }
-    );
+let timer;
+
+
+
+div.addEventListener(
+"mousedown",
+() =>
+{
+
+timer =
+setTimeout(
+() =>
+openMenu(item.id),
+700
+);
+
+});
+
+
+
+div.addEventListener(
+"mouseup",
+() =>
+clearTimeout(timer)
+);
+
+
+
+
+div.onclick =
+() =>
+toggleStock(item.id);
+
+
+
+
+area.appendChild(div);
+
+
+});
+
 
 }
 
 
 
+
+
+
+
+function openMenu(id)
+{
+
+let item =
+getItems()
+.find(
+x=>x.id===id
+);
+
+
+
+let action =
+prompt(
+"操作を選択\n1:編集\n2:削除"
+);
+
+
+
+if(action==="1")
+{
+
+let name =
+prompt(
+"商品名",
+item.name
+);
+
+
+
+if(name)
+{
+
+item.name=name;
+
+updateItem(item);
+
+render();
+
+}
+
+}
+
+
+
+
+if(action==="2")
+{
+
+deleteItem(id);
+
+render();
+
+}
+
+
+}
 
 
 
@@ -358,208 +350,28 @@ onclick="event.stopPropagation();removeItem(${item.id})">
 function toggleStock(id)
 {
 
-    const items =
-    getItems();
+let items =
+getItems();
 
 
-    const item =
-    items.find(
-        x =>
-        x.id === id
-    );
-
-
-
-    if(!item)
-    {
-        return;
-    }
+let item =
+items.find(
+x=>x.id===id
+);
 
 
 
-    item.stock =
-    !item.stock;
+item.stock =
+!item.stock;
 
 
 
-    item.shopping =
-    !item.stock;
+updateItem(item);
 
 
-
-    updateItem(item);
-
-
-
-    render();
+render();
 
 }
-
-
-
-
-
-
-
-
-
-function dragStart(e)
-{
-
-    dragId =
-    Number(
-        e.currentTarget.dataset.id
-    );
-
-}
-
-
-
-
-
-
-function dragOver(e)
-{
-
-    e.preventDefault();
-
-
-    const target =
-    e.currentTarget;
-
-
-
-    if(!placeholder)
-    {
-
-        placeholder =
-        document.createElement("div");
-
-
-        placeholder.className =
-        "drag-line";
-
-    }
-
-
-    target.before(
-        placeholder
-    );
-
-}
-
-
-
-
-
-
-function dropItem(e)
-{
-
-    e.preventDefault();
-
-
-
-    const target =
-    Number(
-        e.currentTarget.dataset.id
-    );
-
-
-
-    reorder(
-        dragId,
-        target
-    );
-
-
-
-    placeholder?.remove();
-
-    placeholder=null;
-
-
-
-    render();
-
-}
-
-
-
-
-
-
-
-
-function reorder(from,to)
-{
-
-    const data =
-    getData();
-
-
-
-    const items =
-    data.items;
-
-
-
-    const fromIndex =
-    items.findIndex(
-        x =>
-        x.id === from
-    );
-
-
-    const toIndex =
-    items.findIndex(
-        x =>
-        x.id === to
-    );
-
-
-
-    const move =
-    items.splice(
-        fromIndex,
-        1
-    )[0];
-
-
-
-    items.splice(
-        toIndex,
-        0,
-        move
-    );
-
-
-
-    saveData(data);
-
-}
-
-
-
-
-
-
-
-
-function removeItem(id)
-{
-
-    if(confirm("削除しますか？"))
-    {
-
-        deleteItem(id);
-
-        render();
-
-    }
-
-}
-
 
 
 
@@ -569,45 +381,31 @@ function removeItem(id)
 function updateCount()
 {
 
-    const items =
-    getItems();
+let items =
+getItems();
 
 
 
-    const total =
-    document
-    .getElementById("total-items");
-
-
-
-    if(total)
-    {
-
-        total.textContent =
-        `登録 ${items.length}件`;
-
-    }
+document
+.getElementById("total-items")
+.textContent =
+`登録 ${items.length}件`;
 
 
 
 
 
-    const shopping =
-    document
-    .getElementById("shopping-count");
+let count =
+items.filter(
+x =>
+!x.stock
+).length;
 
 
 
-    if(shopping)
-    {
-
-        shopping.textContent =
-        `買い物 ${
-        items.filter(
-            x=>!x.stock
-        ).length
-        }件`;
-
-    }
+document
+.getElementById("shopping-count")
+.textContent =
+`買い物 ${count}件`;
 
 }
