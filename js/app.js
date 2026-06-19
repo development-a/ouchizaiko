@@ -7,10 +7,6 @@ init
 
 let currentFilter="all";
 
-let dragId=null;
-
-let placeholder=null;
-
 
 
 
@@ -26,6 +22,7 @@ addItemForm
 );
 
 
+
 document
 .getElementById("filter-category")
 ?.addEventListener(
@@ -33,17 +30,20 @@ document
 e =>
 {
 
-currentFilter=e.target.value;
+currentFilter =
+e.target.value;
 
-render();
 
-});
+renderInventory();
+
+}
+);
+
 
 
 render();
 
 }
-
 
 
 
@@ -68,35 +68,35 @@ updateCount();
 
 
 
-
 function addItemForm()
 {
 
-let name =
+const name =
 document
 .getElementById("item-name")
 .value;
 
 
-
-let category =
+const category =
 document
 .getElementById("item-category")
 .value;
 
 
 
-if(!name)return;
+if(!name)
+return;
 
 
 
 addItem(
 {
-name,
-category,
+name:name,
+category:category,
 stock:true
 }
 );
+
 
 
 document
@@ -114,32 +114,35 @@ render();
 
 
 
-
-
 function renderSelect()
 {
 
-let categories=getCategories();
+const categories =
+getCategories();
 
 
-let select =
+
+const select =
 document
 .getElementById("item-category");
 
 
-let filter =
+
+const filter =
 document
 .getElementById("filter-category");
 
 
 
-if(!select||!filter)return;
+if(!select || !filter)
+return;
+
 
 
 
 select.innerHTML="";
 
-filter.innerHTML=
+filter.innerHTML =
 `
 <option value="all">
 すべて
@@ -149,20 +152,22 @@ filter.innerHTML=
 
 
 categories.forEach(
-c =>
+category =>
 {
 
-select.innerHTML+=
+select.innerHTML +=
 `
-<option value="${c}">
-${c}
+<option value="${category}">
+${category}
 </option>
 `;
 
-filter.innerHTML+=
+
+
+filter.innerHTML +=
 `
-<option value="${c}">
-${c}
+<option value="${category}">
+${category}
 </option>
 `;
 
@@ -170,7 +175,8 @@ ${c}
 
 
 
-filter.value=currentFilter;
+filter.value =
+currentFilter;
 
 }
 
@@ -184,13 +190,14 @@ filter.value=currentFilter;
 function renderInventory()
 {
 
-let area =
+const area =
 document
 .getElementById("inventory-list");
 
 
 
-if(!area)return;
+if(!area)
+return;
 
 
 
@@ -198,19 +205,48 @@ area.innerHTML="";
 
 
 
-let items=getItems();
+let items =
+getItems();
 
 
 
-if(currentFilter!=="all")
+
+
+if(
+currentFilter !== "all"
+)
 {
 
 items =
 items.filter(
-x=>x.category===currentFilter
+item =>
+item.category === currentFilter
 );
 
 }
+
+
+
+
+
+
+if(items.length===0)
+{
+
+area.innerHTML =
+`
+<div class="empty">
+
+商品なし
+
+</div>
+`;
+
+return;
+
+}
+
+
 
 
 
@@ -221,36 +257,44 @@ items.forEach(
 item =>
 {
 
-
-let wrap =
+const div =
 document.createElement("div");
 
 
-wrap.className="item-wrapper";
+
+div.className =
+item.stock
+?
+"item"
+:
+"item no-stock";
 
 
 
-wrap.draggable=true;
+
+
+div.onclick =
+() =>
+{
+
+toggleStock(
+item.id
+);
+
+};
 
 
 
-wrap.dataset.id=item.id;
 
 
 
-wrap.innerHTML=
+
+div.innerHTML =
 `
-<div class="swipe-delete">
-×
-</div>
-
-
-<div class="item ${item.stock?"":"no-stock"}">
-
 
 <div class="watermark">
 
-${item.stock?"":"在庫なし"}
+${item.stock ? "" : "在庫なし"}
 
 </div>
 
@@ -258,11 +302,13 @@ ${item.stock?"":"在庫なし"}
 
 <div class="item-info">
 
+
 <span class="item-name">
 
 ${item.name}
 
 </span>
+
 
 
 <span class="item-category">
@@ -272,8 +318,6 @@ ${item.category}
 </span>
 
 
-</div>
-
 
 </div>
 
@@ -281,231 +325,11 @@ ${item.category}
 
 
 
-
-let card =
-wrap.querySelector(".item");
-
-
-
-
-/* ドラッグ */
-
-wrap.ondragstart =
-() =>
-{
-
-dragId=item.id;
-
-};
-
-
-wrap.ondragover =
-e =>
-{
-
-e.preventDefault();
-
-};
-
-
-wrap.ondrop =
-() =>
-{
-
-reorder(
-dragId,
-item.id
-);
-
-render();
-
-};
-
-
-
-
-
-/* タップ */
-
-card.onclick =
-() =>
-{
-
-toggleStock(item.id);
-
-};
-
-
-
-
-
-/* 長押し */
-
-let timer;
-
-
-card.onmousedown =
-() =>
-{
-
-timer=setTimeout(
-() =>
-openMenu(item.id),
-700
-);
-
-};
-
-
-card.onmouseup =
-() =>
-clearTimeout(timer);
-
-
-
-
-
-
-/* スワイプ */
-
-let startX=0;
-
-
-
-card.addEventListener(
-"touchstart",
-e =>
-{
-
-startX =
-e.touches[0].clientX;
-
-});
-
-
-
-
-card.addEventListener(
-"touchend",
-e =>
-{
-
-let endX =
-e.changedTouches[0].clientX;
-
-
-
-if(startX-endX>50)
-{
-
-card.classList.add(
-"swiped"
-);
-
-}
-
-
-if(endX-startX>50)
-{
-
-card.classList.remove(
-"swiped"
-);
-
-}
-
-});
-
-
-
-
-
-wrap
-.querySelector(".swipe-delete")
-.onclick =
-() =>
-{
-
-deleteItem(item.id);
-
-render();
-
-};
-
-
-
-
-
-
-area.appendChild(wrap);
+area.appendChild(div);
 
 
 
 });
-
-}
-
-
-
-
-
-
-
-
-
-function openMenu(id)
-{
-
-let item =
-getItems()
-.find(
-x=>x.id===id
-);
-
-
-
-let result =
-prompt(
-"1 編集\n2 削除"
-);
-
-
-
-if(result==="1")
-{
-
-let name =
-prompt(
-"商品名",
-item.name
-);
-
-
-
-if(name)
-{
-
-item.name=name;
-
-updateItem(item);
-
-render();
-
-}
-
-}
-
-
-
-if(result==="2")
-{
-
-deleteItem(id);
-
-render();
-
-}
-
 
 }
 
@@ -520,11 +344,21 @@ render();
 function toggleStock(id)
 {
 
-let item =
-getItems()
-.find(
-x=>x.id===id
+const items =
+getItems();
+
+
+
+const item =
+items.find(
+x =>
+x.id===id
 );
+
+
+
+if(!item)
+return;
 
 
 
@@ -537,56 +371,13 @@ updateItem(item);
 
 
 
-render();
+renderInventory();
+
+
+updateCount();
 
 }
 
-
-
-
-
-
-
-
-
-function reorder(from,to)
-{
-
-let data=getData();
-
-
-let items=data.items;
-
-
-
-let a =
-items.findIndex(
-x=>x.id===from
-);
-
-
-let b =
-items.findIndex(
-x=>x.id===to
-);
-
-
-
-let move =
-items.splice(a,1)[0];
-
-
-items.splice(
-b,
-0,
-move
-);
-
-
-
-saveData(data);
-
-}
 
 
 
@@ -597,7 +388,9 @@ saveData(data);
 function updateCount()
 {
 
-let items=getItems();
+const items =
+getItems();
+
 
 
 
@@ -608,13 +401,19 @@ document
 
 
 
+
+const count =
+items.filter(
+x =>
+!x.stock
+).length;
+
+
+
+
 document
 .getElementById("shopping-count")
 .textContent =
-`買い物 ${
-items.filter(
-x=>!x.stock
-).length
-}件`;
+`買い物 ${count}件`;
 
 }
