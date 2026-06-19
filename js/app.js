@@ -6,7 +6,8 @@ init
 
 let currentFilter="all";
 
-let pressTimer=null;
+let dragId=null;
+
 
 
 
@@ -26,20 +27,21 @@ document
 .getElementById("filter-category")
 ?.addEventListener(
 "change",
-function()
+e =>
 {
 
-currentFilter=this.value;
+currentFilter=e.target.value;
 
 renderInventory();
 
 });
 
 
-
 render();
 
 }
+
+
 
 
 
@@ -62,8 +64,10 @@ updateCount();
 
 
 
+
 function addItemForm()
 {
+
 
 const name =
 document
@@ -84,15 +88,13 @@ return;
 
 
 
-addItem({
-
+addItem(
+{
 name:name,
-
 category:category,
-
 stock:true
-
-});
+}
+);
 
 
 
@@ -105,6 +107,7 @@ document
 render();
 
 }
+
 
 
 
@@ -134,7 +137,7 @@ document
 
 
 
-if(!itemSelect || !filterSelect)
+if(!itemSelect)
 return;
 
 
@@ -142,7 +145,7 @@ return;
 itemSelect.innerHTML="";
 
 
-filterSelect.innerHTML=
+filterSelect.innerHTML =
 `
 <option value="all">
 すべて
@@ -198,11 +201,6 @@ document
 
 
 
-if(!area)
-return;
-
-
-
 area.innerHTML="";
 
 
@@ -211,34 +209,17 @@ let items=getItems();
 
 
 
+
+
 if(currentFilter!=="all")
 {
 
 items =
 items.filter(
-i=>i.category===currentFilter
+x=>x.category===currentFilter
 );
 
 }
-
-
-
-if(items.length===0)
-{
-
-area.innerHTML=
-`
-<div class="empty">
-
-商品がありません
-
-</div>
-`;
-
-return;
-
-}
-
 
 
 
@@ -263,8 +244,18 @@ item.stock
 
 
 
+card.draggable=true;
 
-card.innerHTML=
+
+
+card.dataset.id=item.id;
+
+
+
+
+
+
+card.innerHTML =
 `
 
 <div class="watermark">
@@ -274,15 +265,14 @@ ${item.stock ? "" : "在庫なし"}
 </div>
 
 
-<div class="item-info">
 
+<div class="item-info">
 
 <span class="item-name">
 
 ${item.name}
 
 </span>
-
 
 
 <span class="item-category">
@@ -295,6 +285,13 @@ ${item.category}
 </div>
 
 
+
+<button class="delete-button">
+
+削除
+
+</button>
+
 `;
 
 
@@ -302,14 +299,20 @@ ${item.category}
 
 
 
+// 在庫切替
 
-/*
-クリック
-在庫切替
-*/
+card.onclick =
+e =>
+{
 
-card.onclick=
-()=>{
+if(
+e.target.classList.contains(
+"delete-button"
+)
+)
+return;
+
+
 
 toggleStock(item.id);
 
@@ -321,45 +324,91 @@ toggleStock(item.id);
 
 
 
-/*
-長押し
-*/
+// 削除
+
+card
+.querySelector(".delete-button")
+.onclick =
+e =>
+{
+
+e.stopPropagation();
+
+
+
+if(
+confirm(
+`${item.name}を削除しますか？`
+)
+)
+{
+
+deleteItem(item.id);
+
+
+render();
+
+}
+
+};
+
+
+
+
+
+
+
+
+// ドラッグ開始
 
 card.addEventListener(
-"mousedown",
+"dragstart",
 ()=>{
 
-pressTimer =
-setTimeout(
-()=>{
+dragId=item.id;
 
-showMenu(item);
-
-},
-700
+}
 );
 
-});
 
-
-
-card.addEventListener(
-"mouseup",
-()=>{
-
-clearTimeout(pressTimer);
-
-});
 
 
 
 card.addEventListener(
-"mouseleave",
-()=>{
+"dragover",
+e=>
+{
 
-clearTimeout(pressTimer);
+e.preventDefault();
 
-});
+}
+);
+
+
+
+
+
+
+card.addEventListener(
+"drop",
+e=>
+{
+
+e.preventDefault();
+
+
+moveItem(
+dragId,
+item.id
+);
+
+
+render();
+
+}
+
+);
+
 
 
 
@@ -377,67 +426,72 @@ area.appendChild(card);
 
 
 
-function showMenu(item)
+
+
+
+
+function moveItem(
+from,
+to
+)
 {
 
 
-const action =
-prompt(
-`${item.name}\n\n1:編集\n2:削除`
+const data =
+getData();
+
+
+
+const items =
+data.items;
+
+
+
+const fromIndex =
+items.findIndex(
+x=>x.id===from
 );
 
 
 
-if(action==="1")
-{
-
-editItem(item);
-
-}
-
-
-
-if(action==="2")
-{
-
-deleteItem(item.id);
-
-render();
-
-}
-
-}
-
-
-
-
-
-function editItem(item)
-{
-
-const name =
-prompt(
-"商品名",
-item.name
+const toIndex =
+items.findIndex(
+x=>x.id===to
 );
 
 
 
-if(!name)
+if(
+fromIndex===-1 ||
+toIndex===-1
+)
 return;
 
 
 
-item.name=name;
+
+
+const move =
+items.splice(
+fromIndex,
+1
+)[0];
 
 
 
-updateItem(item);
+items.splice(
+toIndex,
+0,
+move
+);
 
 
-render();
+
+saveData(data);
 
 }
+
+
 
 
 
@@ -447,6 +501,7 @@ render();
 
 function toggleStock(id)
 {
+
 
 const items=getItems();
 
@@ -481,6 +536,8 @@ render();
 
 
 
+
+
 function updateCount()
 {
 
@@ -489,44 +546,23 @@ const items=getItems();
 
 
 
-const total =
 document
-.getElementById("total-items");
-
-
-
-if(total)
-{
-
-total.textContent=
+.getElementById("total-items")
+.textContent =
 `登録 ${items.length}件`;
 
-}
 
 
 
-
-
-const shopping =
 document
-.getElementById("shopping-count");
-
-
-
-if(shopping)
-{
-
-const count =
+.getElementById("shopping-count")
+.textContent =
+`
+買い物 ${
 items.filter(
-x=>x.stock===false
-).length;
-
-
-
-shopping.textContent=
-`買い物 ${count}件`;
-
-}
-
+x=>!x.stock
+).length
+}件
+`;
 
 }
