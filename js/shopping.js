@@ -10,8 +10,10 @@ let shoppingFilter="all";
 
 
 
+
 function initShopping()
 {
+
 
 document
 .getElementById("shopping-filter")
@@ -27,6 +29,7 @@ renderShopping();
 });
 
 
+
 renderShopping();
 
 }
@@ -35,10 +38,16 @@ renderShopping();
 
 
 
+
+
+
+
 function renderShopping()
 {
 
+
 renderShoppingFilter();
+
 
 
 const area =
@@ -46,30 +55,63 @@ document
 .getElementById("shopping-list");
 
 
+
+if(!area)
+return;
+
+
+
 area.innerHTML="";
+
 
 
 
 let items =
 getItems()
 .filter(
-x=>!x.stock
+x=>x.stock===false
 );
 
 
 
 
-if(
-shoppingFilter!=="all"
-)
+
+if(shoppingFilter!=="all")
 {
 
 items =
 items.filter(
-x=>x.category===shoppingFilter
+x =>
+x.category===shoppingFilter
 );
 
 }
+
+
+
+
+
+
+if(items.length===0)
+{
+
+area.innerHTML=
+`
+
+<div class="empty">
+
+買うものはありません
+
+</div>
+
+`;
+
+updateShoppingCount();
+
+return;
+
+}
+
 
 
 
@@ -80,6 +122,7 @@ items.forEach(
 item =>
 {
 
+
 const div =
 document.createElement("div");
 
@@ -89,19 +132,30 @@ div.className="item";
 
 
 
+
 div.onclick =
 () =>
 {
 
-item.stock=true;
+if(
+confirm(
+`${item.name}を購入済みにしますか？`
+)
+)
+{
 
+item.stock=true;
 
 updateItem(item);
 
 
 renderShopping();
 
+}
+
 };
+
+
 
 
 
@@ -127,10 +181,12 @@ ${item.category}
 </span>
 
 
-
 </div>
 
+
 `;
+
+
 
 
 
@@ -141,9 +197,12 @@ area.appendChild(div);
 
 
 
-updateCount();
+
+
+updateShoppingCount();
 
 }
+
 
 
 
@@ -154,34 +213,44 @@ updateCount();
 function renderShoppingFilter()
 {
 
+
 const filter =
 document
 .getElementById("shopping-filter");
 
 
 
-if(!filter)return;
+if(!filter)
+return;
 
 
 
 filter.innerHTML =
 `
+
 <option value="all">
+
 すべて
+
 </option>
+
 `;
+
 
 
 
 getCategories()
 .forEach(
-c =>
+c=>
 {
 
 filter.innerHTML +=
+
 `
 <option value="${c}">
+
 ${c}
+
 </option>
 `;
 
@@ -198,21 +267,34 @@ filter.value=shoppingFilter;
 
 
 
-function updateCount()
+
+
+function updateShoppingCount()
 {
+
 
 const count =
 getItems()
 .filter(
-x=>!x.stock
+x=>x.stock===false
 )
 .length;
 
 
 
+const target =
 document
-.getElementById("shopping-count")
-.textContent =
+.getElementById("shopping-count");
+
+
+
+if(target)
+{
+
+target.textContent =
 `買い物 ${count}件`;
+
+}
+
 
 }
