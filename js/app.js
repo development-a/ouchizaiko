@@ -12,6 +12,8 @@ let currentFilter = "all";
 
 let dragId = null;
 
+let placeholder = null;
+
 
 
 
@@ -65,11 +67,6 @@ function init()
 
 
 
-/*
---------------------------------
-全体表示
---------------------------------
-*/
 
 function render()
 {
@@ -89,9 +86,10 @@ function render()
 
 
 
+
 /*
 --------------------------------
-商品追加
+商品登録
 --------------------------------
 */
 
@@ -116,11 +114,11 @@ function addItemForm()
 
 
 
-
     if(name==="")
     {
         return;
     }
+
 
 
 
@@ -153,11 +151,9 @@ function addItemForm()
 
 
 
-
-
 /*
 --------------------------------
-セレクト生成
+セレクト
 --------------------------------
 */
 
@@ -174,6 +170,7 @@ function renderSelect()
         .getElementById(
             "item-category"
         );
+
 
 
     const filter =
@@ -234,7 +231,6 @@ function renderSelect()
 
 
 
-
 /*
 --------------------------------
 在庫一覧
@@ -261,18 +257,16 @@ function renderInventory()
 
 
 
-
-
     if(
         currentFilter !== "all"
     )
     {
 
         items =
-            items.filter(
-                item =>
-                item.category === currentFilter
-            );
+        items.filter(
+            item =>
+            item.category === currentFilter
+        );
 
     }
 
@@ -306,19 +300,22 @@ function renderInventory()
 
 
             const div =
-                document.createElement(
-                    "div"
-                );
+            document.createElement(
+                "div"
+            );
 
 
 
             div.className =
-                "item";
+            item.stock
+            ?
+            "item"
+            :
+            "item no-stock";
 
 
 
-            div.draggable =
-                true;
+            div.draggable=true;
 
 
 
@@ -335,10 +332,7 @@ function renderInventory()
 
 
             div.ondragover =
-                e =>
-                {
-                    e.preventDefault();
-                };
+                dragOver;
 
 
 
@@ -348,33 +342,32 @@ function renderInventory()
 
 
 
-            /*
-            カードタップ
-            */
+
 
             div.onclick =
-                e =>
-                {
+            e =>
+            {
 
-                    if(
-                        e.target.closest(
-                            "button"
-                        ) ||
-                        e.target.closest(
-                            "input"
-                        )
+                if(
+                    e.target.closest(
+                    "button"
                     )
-                    {
-                        return;
-                    }
+                    ||
+                    e.target.closest(
+                    "input"
+                    )
+                )
+                {
+                    return;
+                }
 
 
-                    toggleStock(
-                        item.id
-                    );
+                toggleStock(
+                    item.id
+                );
 
+            };
 
-                };
 
 
 
@@ -384,21 +377,22 @@ function renderInventory()
 
             div.innerHTML =
 `
+<div class="watermark">
+在庫なし
+</div>
+
+
 <div class="item-info">
 
 
 <span class="item-name">
-
 ${item.name}
-
 </span>
 
 
 
 <span class="item-category">
-
 ${item.category}
-
 </span>
 
 
@@ -407,22 +401,19 @@ ${item.category}
 
 
 
-
 <div class="item-actions">
-
 
 
 <label class="switch">
 
-
 <input
 type="checkbox"
-${item.stock ? "checked":""}
->
+${item.stock?"checked":""}
+onclick="event.stopPropagation()"
+onchange="toggleStock(${item.id})">
 
 
 <span class="slider">
-
 </span>
 
 
@@ -431,10 +422,9 @@ ${item.stock ? "checked":""}
 
 
 
-
 <button
 class="delete-button"
-onclick="removeItem(${item.id})">
+onclick="event.stopPropagation();removeItem(${item.id})">
 
 🗑
 
@@ -450,66 +440,8 @@ onclick="removeItem(${item.id})">
             area.appendChild(div);
 
 
-
         }
     );
-
-}
-
-
-
-
-
-
-
-
-/*
---------------------------------
-在庫変更
---------------------------------
-*/
-
-function toggleStock(id)
-{
-
-    const items =
-        getItems();
-
-
-
-    const item =
-        items.find(
-            x =>
-            x.id===id
-        );
-
-
-
-    if(!item)
-    {
-        return;
-    }
-
-
-
-
-    item.stock =
-        !item.stock;
-
-
-
-    item.shopping =
-        !item.stock;
-
-
-
-
-    updateItem(item);
-
-
-
-    render();
-
 
 }
 
@@ -531,11 +463,49 @@ function dragStart(e)
 {
 
     dragId =
-        Number(
-            e.currentTarget.dataset.id
-        );
+    Number(
+        e.currentTarget.dataset.id
+    );
 
 }
+
+
+
+
+function dragOver(e)
+{
+
+    e.preventDefault();
+
+
+
+    const target =
+        e.currentTarget;
+
+
+
+    if(!placeholder)
+    {
+
+        placeholder =
+        document.createElement(
+            "div"
+        );
+
+
+        placeholder.className =
+        "drag-line";
+
+    }
+
+
+
+    target.before(
+        placeholder
+    );
+
+}
+
 
 
 
@@ -550,9 +520,9 @@ function dropItem(e)
 
 
     const target =
-        Number(
-            e.currentTarget.dataset.id
-        );
+    Number(
+        e.currentTarget.dataset.id
+    );
 
 
 
@@ -562,9 +532,18 @@ function dropItem(e)
     );
 
 
+
+    placeholder?.remove();
+
+    placeholder=null;
+
+
+
     render();
 
 }
+
+
 
 
 
@@ -588,25 +567,26 @@ function reorder(
 
 
     const fromIndex =
-        items.findIndex(
-            x =>
-            x.id===from
-        );
+    items.findIndex(
+        x =>
+        x.id===from
+    );
+
 
 
     const toIndex =
-        items.findIndex(
-            x =>
-            x.id===to
-        );
+    items.findIndex(
+        x =>
+        x.id===to
+    );
 
 
 
     const move =
-        items.splice(
-            fromIndex,
-            1
-        )[0];
+    items.splice(
+        fromIndex,
+        1
+    )[0];
 
 
 
@@ -631,6 +611,58 @@ function reorder(
 
 /*
 --------------------------------
+在庫切替
+--------------------------------
+*/
+
+function toggleStock(id)
+{
+
+    const items =
+        getItems();
+
+
+
+    const item =
+        items.find(
+            x=>x.id===id
+        );
+
+
+
+    if(!item)
+    {
+        return;
+    }
+
+
+
+    item.stock =
+        !item.stock;
+
+
+
+    item.shopping =
+        !item.stock;
+
+
+
+    updateItem(item);
+
+
+
+    render();
+
+}
+
+
+
+
+
+
+
+/*
+--------------------------------
 削除
 --------------------------------
 */
@@ -638,22 +670,16 @@ function reorder(
 function removeItem(id)
 {
 
-    if(
-        confirm(
-            "削除しますか？"
-        )
-    )
+    if(confirm("削除しますか？"))
     {
 
         deleteItem(id);
-
 
         render();
 
     }
 
 }
-
 
 
 
@@ -681,5 +707,18 @@ function updateCount()
     )
     .textContent =
     `登録 ${items.length}件`;
+
+
+
+    document
+    .getElementById(
+        "shopping-count"
+    )
+    .textContent =
+    `買い物 ${
+    items.filter(
+        x=>x.shopping
+    ).length
+    }件`;
 
 }
