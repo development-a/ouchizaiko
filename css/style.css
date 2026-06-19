@@ -901,3 +901,30 @@ flex-direction:column;
 
 
 }
+.drag-placeholder{
+
+height:35px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+color:#2563eb;
+
+font-weight:bold;
+
+letter-spacing:3px;
+
+border-top:3px dashed #2563eb;
+
+border-bottom:3px dashed #2563eb;
+
+margin:5px 0;
+
+background:#eff6ff;
+
+border-radius:8px;
+
+}
