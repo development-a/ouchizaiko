@@ -7,7 +7,8 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+content="width=device-width, initial-scale=1.0">
+
 
 <title>
 在庫管理
@@ -17,37 +18,47 @@ content="width=device-width,initial-scale=1.0">
 <link rel="stylesheet"
 href="css/style.css">
 
+
 </head>
 
 
 <body>
 
 
-<header>
+<header class="header">
 
+
+<div class="header-left">
 
 <h1>
 🏠 在庫管理
 </h1>
 
+</div>
 
 
-<nav>
+
+<nav class="header-nav">
 
 <a href="category.html">
-⚙ ジャンル
+
+⚙ ジャンル管理
+
 </a>
 
 </nav>
 
 
 
-<div class="summary">
+
+<div class="header-right">
 
 
 <a href="shopping.html"
 class="shopping-link">
 
+
+🛒
 
 <span id="shopping-count">
 
@@ -62,22 +73,27 @@ class="shopping-link">
 </div>
 
 
+
 </header>
 
 
 
 
 
-<main>
+
+
+<main class="container">
 
 
 
 
 
-<section class="input-card">
+
+<section class="card input-card">
 
 
-<div class="card-title">
+
+<div class="card-header">
 
 
 <h2>
@@ -85,7 +101,9 @@ class="shopping-link">
 </h2>
 
 
-<span id="total-items">
+
+<span class="badge"
+id="total-items">
 
 登録 0件
 
@@ -97,19 +115,28 @@ class="shopping-link">
 
 
 
-<div class="form">
+
+<div class="input-area">
+
 
 
 <input
 id="item-name"
-placeholder="商品名">
+type="text"
+placeholder="商品名を入力">
+
+
 
 
 
 <select
 id="item-category">
 
+
 </select>
+
+
+
 
 
 
@@ -121,7 +148,10 @@ id="add-button">
 </button>
 
 
+
+
 </div>
+
 
 
 </section>
@@ -133,40 +163,59 @@ id="add-button">
 
 
 
-<section class="list-card">
+
+<section class="card list-card">
 
 
 
-<div class="list-header">
+<div class="card-header">
 
 
 <h2>
+
 在庫一覧
+
 </h2>
+
+
+
 
 
 <select
 id="filter-category">
 
+
 <option value="all">
+
 すべて
+
 </option>
 
 
 </select>
 
 
+
+</div>
+
+
+
+
+
+
+<div id="inventory-list"
+class="inventory-list">
+
+
 </div>
 
 
-
-<div id="inventory-list">
-
-</div>
 
 
 
 </section>
+
+
 
 
 
@@ -177,7 +226,9 @@ id="filter-category">
 
 
 
-<footer>
+
+<footer class="footer">
+
 
 GitHub Pages
 
@@ -186,9 +237,12 @@ GitHub Pages
 
 
 
+
+
 <script src="js/storage.js"></script>
 
 <script src="js/app.js"></script>
+
 
 
 </body>
