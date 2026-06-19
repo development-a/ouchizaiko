@@ -1,0 +1,390 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+body{
+
+    min-height:100vh;
+
+    background:#f3f6fb;
+
+    color:#333;
+
+    font-family:
+        "Segoe UI",
+        sans-serif;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+
+
+header{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+
+header h1{
+
+    font-size:24px;
+
+}
+
+
+
+.summary{
+
+    display:flex;
+
+    gap:15px;
+
+}
+
+
+
+.summary span{
+
+    background:white;
+
+    color:#2563eb;
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+main{
+
+    width:90%;
+
+    max-width:900px;
+
+    margin:30px auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+    flex:1;
+
+}
+
+
+
+
+
+.input-card,
+.list-card,
+.shopping-card,
+.warning-card{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:25px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,0.1);
+
+}
+
+
+
+h2{
+
+    margin-bottom:20px;
+
+    color:#1f2937;
+
+}
+
+
+
+
+
+.form{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:10px;
+
+}
+
+
+
+input,
+select,
+button{
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:1px solid #ddd;
+
+    font-size:15px;
+
+}
+
+
+
+button{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    cursor:pointer;
+
+}
+
+
+
+button:hover{
+
+    opacity:0.85;
+
+}
+
+
+
+
+
+.item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#f8fafc;
+
+    margin-bottom:10px;
+
+    padding:15px;
+
+    border-radius:10px;
+
+}
+
+
+
+.item-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:5px;
+
+}
+
+
+
+.item-name{
+
+    font-weight:bold;
+
+    font-size:18px;
+
+}
+
+
+
+.item-category{
+
+    font-size:13px;
+
+    color:#64748b;
+
+}
+
+
+
+.item-actions{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+
+
+.small-button{
+
+    padding:8px 12px;
+
+    font-size:13px;
+
+}
+
+
+
+.delete{
+
+    background:#dc2626;
+
+}
+
+
+
+.buy{
+
+    background:#16a34a;
+
+}
+
+
+
+
+
+.shopping-item{
+
+    background:#ecfdf5;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    margin-bottom:8px;
+
+}
+
+
+
+
+
+.expire-warning{
+
+    background:#fef2f2;
+
+    color:#dc2626;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    margin-bottom:8px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+.empty{
+
+    color:#94a3b8;
+
+    text-align:center;
+
+    padding:20px;
+
+}
+
+
+
+
+
+footer{
+
+    text-align:center;
+
+    padding:15px;
+
+    background:#e2e8f0;
+
+}
+
+
+
+
+
+@media(max-width:700px)
+{
+
+
+header{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+
+.form{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.item{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
+
+
+.item-actions{
+
+    width:100%;
+
+}
+
+
+
+.item-actions button{
+
+    flex:1;
+
+}
+
+
+}
