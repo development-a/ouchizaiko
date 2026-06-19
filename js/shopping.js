@@ -7,10 +7,9 @@ document.addEventListener(
             "all";
 
 
-        setupFilter();
+        setup();
 
         render();
-
 
     }
 );
@@ -27,11 +26,11 @@ let currentFilter = "all";
 
 /*
 --------------------------------
-フィルター設定
+初期設定
 --------------------------------
 */
 
-function setupFilter()
+function setup()
 {
 
     document
@@ -49,7 +48,6 @@ function setupFilter()
 
             render();
 
-
         }
     );
 
@@ -64,7 +62,7 @@ function setupFilter()
 
 /*
 --------------------------------
-全体表示
+描画
 --------------------------------
 */
 
@@ -75,6 +73,7 @@ function render()
 
     renderShopping();
 
+    updateShoppingCount();
 
 }
 
@@ -88,14 +87,14 @@ function render()
 
 /*
 --------------------------------
-フィルター生成
+フィルター
 --------------------------------
 */
 
 function renderFilter()
 {
 
-    const select =
+    const filter =
         document
         .getElementById(
             "filter-category"
@@ -108,7 +107,8 @@ function renderFilter()
 
 
 
-    select.innerHTML =
+
+    filter.innerHTML =
     `
     <option value="all">
     すべて
@@ -117,12 +117,11 @@ function renderFilter()
 
 
 
-
     categories.forEach(
         c =>
         {
 
-            select.innerHTML +=
+            filter.innerHTML +=
             `
             <option value="${c}">
             ${c}
@@ -134,9 +133,8 @@ function renderFilter()
 
 
 
-    select.value =
+    filter.value =
         currentFilter;
-
 
 }
 
@@ -147,10 +145,9 @@ function renderFilter()
 
 
 
-
 /*
 --------------------------------
-買い物表示
+買い物一覧
 --------------------------------
 */
 
@@ -173,8 +170,10 @@ function renderShopping()
 
 
 
+
+
     /*
-    在庫なしだけ表示
+    在庫なしのみ
     */
 
     items =
@@ -187,8 +186,9 @@ function renderShopping()
 
 
 
+
     /*
-    フィルター
+    ジャンル絞り込み
     */
 
     if(
@@ -197,12 +197,13 @@ function renderShopping()
     {
 
         items =
-            items.filter(
-                item =>
-                item.category === currentFilter
-            );
+        items.filter(
+            item =>
+            item.category === currentFilter
+        );
 
     }
+
 
 
 
@@ -221,9 +222,11 @@ function renderShopping()
         </div>
         `;
 
+
         return;
 
     }
+
 
 
 
@@ -235,28 +238,31 @@ function renderShopping()
         {
 
             const div =
-                document.createElement(
-                    "div"
-                );
+            document.createElement(
+                "div"
+            );
 
 
 
             div.className =
-                "item shopping-touch";
+            "item";
 
 
 
             /*
-            タップで購入扱い
+            タップ購入
             */
 
             div.onclick =
-                () =>
-                {
-                    buyItem(
-                        item.id
-                    );
-                };
+            () =>
+            {
+
+                completeBuy(
+                    item.id
+                );
+
+            };
+
 
 
 
@@ -285,18 +291,26 @@ ${item.category}
 </div>
 
 
+
+
 <div class="item-actions">
 
 
-<div class="switch">
+<label class="switch">
 
 
-<div class="slider">
+<input
+type="checkbox"
+onclick="event.stopPropagation()"
+>
 
-</div>
+
+<span class="slider">
+
+</span>
 
 
-</div>
+</label>
 
 
 </div>
@@ -311,7 +325,6 @@ ${item.category}
 
         }
     );
-
 
 }
 
@@ -328,7 +341,7 @@ ${item.category}
 --------------------------------
 */
 
-function buyItem(id)
+function completeBuy(id)
 {
 
     const items =
@@ -339,7 +352,7 @@ function buyItem(id)
     const item =
         items.find(
             x =>
-            x.id === id
+            x.id===id
         );
 
 
@@ -348,7 +361,6 @@ function buyItem(id)
     {
         return;
     }
-
 
 
 
@@ -362,12 +374,56 @@ function buyItem(id)
 
 
 
-
     updateItem(item);
 
 
 
     render();
 
+
+}
+
+
+
+
+
+
+
+
+
+/*
+--------------------------------
+件数
+--------------------------------
+*/
+
+function updateShoppingCount()
+{
+
+    const count =
+    getItems()
+    .filter(
+        x =>
+        !x.stock
+    )
+    .length;
+
+
+
+    const area =
+        document
+        .getElementById(
+            "shopping-count"
+        );
+
+
+
+    if(area)
+    {
+
+        area.textContent =
+        `買い物 ${count}件`;
+
+    }
 
 }
