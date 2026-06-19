@@ -2,9 +2,9 @@ document.addEventListener(
     "DOMContentLoaded",
     () =>
     {
-        render();
-
         setupEvents();
+
+        render();
     }
 );
 
@@ -28,6 +28,28 @@ function setupEvents()
         addNewItem
     );
 
+
+
+    document
+    .getElementById(
+        "add-category"
+    )
+    .addEventListener(
+        "click",
+        addNewCategory
+    );
+
+
+
+    document
+    .getElementById(
+        "filter-category"
+    )
+    .addEventListener(
+        "change",
+        render
+    );
+
 }
 
 
@@ -35,7 +57,7 @@ function setupEvents()
 
 /*
 --------------------------------
-登録
+商品追加
 --------------------------------
 */
 
@@ -48,6 +70,7 @@ function addNewItem()
             "item-name"
         )
         .value;
+
 
 
     const category =
@@ -75,9 +98,7 @@ function addNewItem()
 
         name:name,
 
-        category:category,
-
-        stock:true
+        category:category
 
     });
 
@@ -102,7 +123,42 @@ function addNewItem()
 
 /*
 --------------------------------
-全体表示
+ジャンル追加
+--------------------------------
+*/
+
+function addNewCategory()
+{
+
+    const input =
+        document
+        .getElementById(
+            "new-category"
+        );
+
+
+
+    addCategory(
+        input.value
+    );
+
+
+
+    input.value="";
+
+
+    render();
+
+}
+
+
+
+
+
+
+/*
+--------------------------------
+全体描画
 --------------------------------
 */
 
@@ -113,11 +169,14 @@ function render()
         getItems();
 
 
+
+    renderCategorySelect();
+
+    renderCategories();
+
     renderInventory(items);
 
-
     renderShopping(items);
-
 
     updateSummary(items);
 
@@ -131,7 +190,156 @@ function render()
 
 /*
 --------------------------------
-在庫一覧
+ジャンル選択
+--------------------------------
+*/
+
+function renderCategorySelect()
+{
+
+    const categories =
+        getCategories();
+
+
+
+    const select =
+        document
+        .getElementById(
+            "item-category"
+        );
+
+
+    const filter =
+        document
+        .getElementById(
+            "filter-category"
+        );
+
+
+
+    select.innerHTML="";
+
+    filter.innerHTML =
+    `
+    <option value="all">
+    すべて
+    </option>
+    `;
+
+
+
+
+    categories.forEach(
+        c =>
+        {
+
+
+            select.innerHTML +=
+            `
+            <option>
+            ${c}
+            </option>
+            `;
+
+
+
+            filter.innerHTML +=
+            `
+            <option>
+            ${c}
+            </option>
+            `;
+
+        }
+    );
+
+}
+
+
+
+
+
+/*
+--------------------------------
+ジャンル管理
+--------------------------------
+*/
+
+function renderCategories()
+{
+
+    const area =
+        document
+        .getElementById(
+            "category-list"
+        );
+
+
+
+    area.innerHTML="";
+
+
+
+    getCategories()
+    .forEach(
+        c =>
+        {
+
+            area.innerHTML +=
+`
+<div class="category-item">
+
+
+<span>
+${c}
+</span>
+
+
+<button
+class="category-delete"
+onclick="removeCategory('${c}')">
+
+削除
+
+</button>
+
+
+</div>
+`;
+
+        }
+    );
+
+}
+
+
+
+function removeCategory(name)
+{
+
+    if(
+        confirm(
+            "ジャンル削除しますか？"
+        )
+    )
+    {
+
+        deleteCategory(name);
+
+        render();
+
+    }
+
+}
+
+
+
+
+
+
+/*
+--------------------------------
+在庫表示
 --------------------------------
 */
 
@@ -145,7 +353,32 @@ function renderInventory(items)
         );
 
 
+
     area.innerHTML="";
+
+
+
+    const filter =
+        document
+        .getElementById(
+            "filter-category"
+        )
+        .value;
+
+
+
+    if(filter !== "all")
+    {
+
+        items =
+            items.filter(
+                x =>
+                x.category === filter
+            );
+
+    }
+
+
 
 
 
@@ -155,7 +388,7 @@ function renderInventory(items)
         area.innerHTML =
         `
         <div class="empty">
-        登録なし
+        商品なし
         </div>
         `;
 
@@ -165,50 +398,83 @@ function renderInventory(items)
 
 
 
+
+    const groups =
+        {};
+
+
+
     items.forEach(
         item =>
         {
 
-            const div =
-                document.createElement(
-                    "div"
-                );
+            if(!groups[item.category])
+            {
+                groups[item.category]=[];
+            }
 
 
-            div.className =
-                "item";
+            groups[item.category]
+            .push(item);
 
-
-
-            const status =
-                item.stock
-                ?
-                `
-                <span class="status stock-ok">
-                在庫あり
-                </span>
-                `
-                :
-                `
-                <span class="status stock-ng">
-                在庫なし
-                </span>
-                `;
+        }
+    );
 
 
 
-            div.innerHTML =
+
+
+    Object.keys(groups)
+    .forEach(
+        category =>
+        {
+
+
+            area.innerHTML +=
 `
+<div class="group-title">
+
+${category}
+
+</div>
+`;
+
+
+
+            groups[category]
+            .forEach(
+                item =>
+                {
+
+
+const status =
+item.stock
+?
+`
+<span class="status stock-ok">
+在庫あり
+</span>
+`
+:
+`
+<span class="status stock-ng">
+在庫なし
+</span>
+`;
+
+
+
+
+area.innerHTML +=
+`
+<div class="item">
+
+
 <div class="item-info">
 
 
 <span class="item-name">
 ${item.name}
-</span>
-
-
-<span class="item-category">
-${item.category}
 </span>
 
 
@@ -218,41 +484,67 @@ ${status}
 </div>
 
 
+
+
 <div class="item-actions">
 
 
+
 <button
-class="small-button stock"
+class="stock-button ${item.stock ? "stock-off":"stock-on"}"
 onclick="toggleStock(${item.id})">
 
-${item.stock ? "在庫なし" : "在庫あり"}
+${item.stock ? "在庫なし":"在庫あり"}
 
 </button>
 
 
 
 <button
-class="small-button delete"
-onclick="removeItem(${item.id})">
+class="move-button"
+onclick="move(${item.id},-1)">
 
-削除
+↑
 
 </button>
+
+
+
+<button
+class="move-button"
+onclick="move(${item.id},1)">
+
+↓
+
+</button>
+
+
+
+
+<button
+class="delete-button"
+onclick="removeItem(${item.id})">
+
+🗑
+
+</button>
+
+
+
+</div>
 
 
 </div>
 `;
 
-
-
-            area.appendChild(div);
+                }
+            );
 
 
         }
     );
 
 }
-
 
 
 
@@ -275,15 +567,8 @@ function toggleStock(id)
     const item =
         items.find(
             x =>
-            x.id === id
+            x.id===id
         );
-
-
-
-    if(!item)
-    {
-        return;
-    }
 
 
 
@@ -292,19 +577,8 @@ function toggleStock(id)
 
 
 
-    /*
-      在庫なしの場合
-      買い物リストへ
-    */
-
-    if(item.stock)
-    {
-        item.shopping = false;
-    }
-    else
-    {
-        item.shopping = true;
-    }
+    item.shopping =
+        !item.stock;
 
 
 
@@ -316,6 +590,30 @@ function toggleStock(id)
 
 }
 
+
+
+
+
+
+
+/*
+--------------------------------
+並び替え
+--------------------------------
+*/
+
+function move(id,direction)
+{
+
+    moveItem(
+        id,
+        direction
+    );
+
+
+    render();
+
+}
 
 
 
@@ -351,10 +649,9 @@ function removeItem(id)
 
 
 
-
 /*
 --------------------------------
-買い物リスト
+買い物
 --------------------------------
 */
 
@@ -368,14 +665,15 @@ function renderShopping(items)
         );
 
 
+
     area.innerHTML="";
 
 
 
     const list =
         items.filter(
-            item =>
-            item.shopping
+            x =>
+            x.shopping
         );
 
 
@@ -386,13 +684,14 @@ function renderShopping(items)
         area.innerHTML =
         `
         <div class="empty">
-        買い物はありません
+        買い物なし
         </div>
         `;
 
         return;
 
     }
+
 
 
 
@@ -433,14 +732,14 @@ function updateSummary(items)
         "total-items"
     )
     .textContent =
-        `登録 ${items.length}件`;
+    `登録 ${items.length}件`;
 
 
 
     const count =
         items.filter(
-            item =>
-            item.shopping
+            x =>
+            x.shopping
         )
         .length;
 
@@ -451,6 +750,6 @@ function updateSummary(items)
         "shopping-count"
     )
     .textContent =
-        `買い物 ${count}件`;
+    `買い物 ${count}件`;
 
 }
