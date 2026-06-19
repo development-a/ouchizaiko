@@ -1,21 +1,44 @@
-/* カード幅調整 */
+*{
 
-.item{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 
-    position:relative;
-
-    width:100%;
-
-    max-width:650px;
-
-    margin:0 auto 8px;
+}
 
 
-    background:#f8fafc;
 
-    padding:10px 14px;
+body{
 
-    border-radius:10px;
+    min-height:100vh;
+
+    background:#f3f6fb;
+
+    color:#333;
+
+    font-family:
+    "Segoe UI",
+    sans-serif;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+
+
+
+
+header{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:20px;
 
 
     display:flex;
@@ -24,10 +47,7 @@
 
     align-items:center;
 
-
-    cursor:pointer;
-
-    overflow:hidden;
+    gap:20px;
 
 }
 
@@ -35,11 +55,306 @@
 
 
 
+
+nav{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+
+
+
+
+header a{
+
+    color:white;
+
+    text-decoration:none;
+
+    background:
+    rgba(255,255,255,.2);
+
+
+    padding:8px 14px;
+
+
+    border-radius:20px;
+
+}
+
+
+
+
+
+
+.summary{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+
+
+
+
+.summary span{
+
+
+    background:white;
+
+
+    color:#2563eb;
+
+
+    padding:8px 14px;
+
+
+    border-radius:20px;
+
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+.shopping-link{
+
+    text-decoration:none;
+
+}
+
+
+
+
+
+
+
+
+main{
+
+
+    width:90%;
+
+
+    max-width:900px;
+
+
+    margin:30px auto;
+
+
+    flex:1;
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    gap:20px;
+
+}
+
+
+
+
+
+
+.input-card,
+.list-card,
+.shopping-card,
+.category-card{
+
+
+    background:white;
+
+
+    padding:25px;
+
+
+    border-radius:15px;
+
+
+
+    box-shadow:
+
+
+    0 4px 15px rgba(0,0,0,.1);
+
+}
+
+
+
+
+
+
+
+.form{
+
+
+    display:grid;
+
+
+    grid-template-columns:
+
+
+    2fr 1fr 1fr;
+
+
+    gap:10px;
+
+}
+
+
+
+
+
+
+input,
+select,
+button{
+
+
+    padding:12px;
+
+
+    border-radius:8px;
+
+
+    border:1px solid #ddd;
+
+}
+
+
+
+
+
+
+button{
+
+
+    background:#2563eb;
+
+
+    color:white;
+
+
+    border:none;
+
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+
+
+.list-header{
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+
+
+
+
+.item{
+
+
+    position:relative;
+
+
+    width:100%;
+
+
+    max-width:650px;
+
+
+    margin:0 auto 8px;
+
+
+
+    background:#f8fafc;
+
+
+    padding:10px 14px;
+
+
+    border-radius:10px;
+
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+
+    cursor:pointer;
+
+
+    overflow:hidden;
+
+
+
+    transition:.2s;
+
+}
+
+
+
+
+
+
+.item:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
+
+
+
+
 .item.no-stock{
+
 
     background:#fee2e2;
 
+
     border:
+
+
     1px solid #fecaca;
 
 }
@@ -48,9 +363,13 @@
 
 
 
-/* 在庫なし透かし */
+
+
 
 .watermark{
+
+
+    display:none;
 
 
     position:absolute;
@@ -66,22 +385,39 @@
     translateY(-50%);
 
 
+
     font-size:42px;
 
 
     font-weight:bold;
 
 
+
     color:#dc2626;
+
 
 
     opacity:.15;
 
 
+
     pointer-events:none;
 
+}
+
+
+
+
+
+
+.item.no-stock
+.watermark{
+
+
+    display:block;
 
 }
+
 
 
 
@@ -91,12 +427,18 @@
 
 .item-info{
 
+
     display:flex;
+
 
     flex-direction:column;
 
+
     gap:3px;
 
+
+
+    z-index:2;
 
 }
 
@@ -104,9 +446,13 @@
 
 
 
+
+
 .item-name{
 
+
     font-size:16px;
+
 
     font-weight:bold;
 
@@ -116,9 +462,13 @@
 
 
 
+
+
 .item-category{
 
+
     font-size:12px;
+
 
     color:#64748b;
 
@@ -128,33 +478,21 @@
 
 
 
-/* ×ボタン */
-
-.delete-button{
 
 
-    width:28px;
-
-    height:28px;
+.item-actions{
 
 
-    padding:0;
+    display:flex;
 
 
-    border-radius:50%;
+    align-items:center;
 
 
-    background:#dc2626;
+    gap:10px;
 
 
-    color:white;
-
-
-    font-size:20px;
-
-
-    line-height:28px;
-
+    z-index:3;
 
 }
 
@@ -162,7 +500,9 @@
 
 
 
-/* 不要表示 */
+
+
+
 
 .stock-status{
 
@@ -174,13 +514,195 @@
 
 
 
+
+
+
+.delete-button{
+
+
+    width:28px;
+
+
+    height:28px;
+
+
+
+    padding:0;
+
+
+
+    border-radius:50%;
+
+
+
+    background:#dc2626;
+
+
+
+    color:white;
+
+
+
+    font-size:20px;
+
+
+
+    line-height:28px;
+
+}
+
+
+
+
+
+
+
+
+.category-item{
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+    align-items:center;
+
+
+
+    background:#f8fafc;
+
+
+    padding:12px;
+
+
+
+    border-radius:8px;
+
+
+    margin-bottom:10px;
+
+}
+
+
+
+
+
+
+.category-delete{
+
+
+    background:#dc2626;
+
+
+    padding:6px 10px;
+
+}
+
+
+
+
+
+
+
+.drag-line{
+
+
+    height:4px;
+
+
+    margin:6px 0;
+
+
+
+    border-top:
+
+
+    3px dashed #2563eb;
+
+}
+
+
+
+
+
+
+
+
+.empty{
+
+
+    text-align:center;
+
+
+    color:#94a3b8;
+
+
+    padding:20px;
+
+}
+
+
+
+
+
+
+
+footer{
+
+
+    background:#e2e8f0;
+
+
+    text-align:center;
+
+
+    padding:15px;
+
+}
+
+
+
+
+
+
+
+
 @media(max-width:700px)
+
 {
+
+
+header{
+
+
+    flex-direction:column;
+
+}
+
+
+
+
+.form{
+
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+
 
 .item{
 
+
     max-width:100%;
 
+
 }
+
+
 
 }
