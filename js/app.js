@@ -4,12 +4,9 @@ init
 );
 
 
-let currentFilter = "all";
+let currentFilter="all";
 
-let dragId = null;
-
-let placeholder = null;
-
+let pressTimer=null;
 
 
 
@@ -32,9 +29,7 @@ document
 function()
 {
 
-currentFilter =
-this.value;
-
+currentFilter=this.value;
 
 renderInventory();
 
@@ -45,9 +40,6 @@ renderInventory();
 render();
 
 }
-
-
-
 
 
 
@@ -70,15 +62,13 @@ updateCount();
 
 
 
-
-
 function addItemForm()
 {
 
 const name =
 document
 .getElementById("item-name")
-.value;
+.value.trim();
 
 
 
@@ -90,25 +80,26 @@ document
 
 
 if(name==="")
-{
 return;
-}
 
 
 
-addItem(
-{
+addItem({
+
 name:name,
+
 category:category,
+
 stock:true
-}
-);
+
+});
 
 
 
 document
 .getElementById("item-name")
 .value="";
+
 
 
 render();
@@ -122,16 +113,16 @@ render();
 
 
 
-
 function renderSelect()
 {
+
 
 const categories =
 getCategories();
 
 
 
-const categorySelect =
+const itemSelect =
 document
 .getElementById("item-category");
 
@@ -143,48 +134,41 @@ document
 
 
 
-if(!categorySelect ||
-!filterSelect)
-{
+if(!itemSelect || !filterSelect)
 return;
-}
 
 
 
-categorySelect.innerHTML="";
+itemSelect.innerHTML="";
 
-filterSelect.innerHTML =
+
+filterSelect.innerHTML=
 `
 <option value="all">
-
 すべて
-
 </option>
 `;
+
 
 
 
 categories.forEach(
-category =>
+c=>
 {
 
-categorySelect.innerHTML +=
+itemSelect.innerHTML+=
 `
-<option value="${category}">
-
-${category}
-
+<option value="${c}">
+${c}
 </option>
 `;
 
 
 
-filterSelect.innerHTML +=
+filterSelect.innerHTML+=
 `
-<option value="${category}">
-
-${category}
-
+<option value="${c}">
+${c}
 </option>
 `;
 
@@ -192,8 +176,7 @@ ${category}
 
 
 
-filterSelect.value =
-currentFilter;
+filterSelect.value=currentFilter;
 
 }
 
@@ -208,6 +191,7 @@ currentFilter;
 function renderInventory()
 {
 
+
 const area =
 document
 .getElementById("inventory-list");
@@ -215,9 +199,7 @@ document
 
 
 if(!area)
-{
 return;
-}
 
 
 
@@ -225,33 +207,26 @@ area.innerHTML="";
 
 
 
-let items =
-getItems();
+let items=getItems();
 
 
 
-
-
-if(currentFilter !== "all")
+if(currentFilter!=="all")
 {
 
 items =
 items.filter(
-item =>
-item.category === currentFilter
+i=>i.category===currentFilter
 );
 
 }
 
 
 
-
-
-
 if(items.length===0)
 {
 
-area.innerHTML =
+area.innerHTML=
 `
 <div class="empty">
 
@@ -269,22 +244,9 @@ return;
 
 
 
-
 items.forEach(
-item =>
+item=>
 {
-
-
-const wrap =
-document.createElement("div");
-
-
-
-wrap.className =
-"item-wrapper";
-
-
-
 
 
 const card =
@@ -302,26 +264,7 @@ item.stock
 
 
 
-
-
-
-card.onclick =
-function()
-{
-
-toggleStock(
-item.id
-);
-
-};
-
-
-
-
-
-
-
-card.innerHTML =
+card.innerHTML=
 `
 
 <div class="watermark">
@@ -329,7 +272,6 @@ card.innerHTML =
 ${item.stock ? "" : "在庫なし"}
 
 </div>
-
 
 
 <div class="item-info">
@@ -353,15 +295,6 @@ ${item.category}
 </div>
 
 
-
-
-<button
-class="delete-button">
-
-×
-
-</button>
-
 `;
 
 
@@ -369,31 +302,16 @@ class="delete-button">
 
 
 
-card
-.querySelector(".delete-button")
-.onclick =
-function(e)
-{
 
-e.stopPropagation();
+/*
+クリック
+在庫切替
+*/
 
+card.onclick=
+()=>{
 
-
-if(
-confirm(
-`${item.name}を削除しますか？`
-)
-)
-{
-
-deleteItem(
-item.id
-);
-
-
-render();
-
-}
+toggleStock(item.id);
 
 };
 
@@ -403,11 +321,52 @@ render();
 
 
 
-wrap.appendChild(card);
+/*
+長押し
+*/
+
+card.addEventListener(
+"mousedown",
+()=>{
+
+pressTimer =
+setTimeout(
+()=>{
+
+showMenu(item);
+
+},
+700
+);
+
+});
 
 
-area.appendChild(wrap);
 
+card.addEventListener(
+"mouseup",
+()=>{
+
+clearTimeout(pressTimer);
+
+});
+
+
+
+card.addEventListener(
+"mouseleave",
+()=>{
+
+clearTimeout(pressTimer);
+
+});
+
+
+
+
+
+
+area.appendChild(card);
 
 
 });
@@ -418,6 +377,70 @@ area.appendChild(wrap);
 
 
 
+function showMenu(item)
+{
+
+
+const action =
+prompt(
+`${item.name}\n\n1:編集\n2:削除`
+);
+
+
+
+if(action==="1")
+{
+
+editItem(item);
+
+}
+
+
+
+if(action==="2")
+{
+
+deleteItem(item.id);
+
+render();
+
+}
+
+}
+
+
+
+
+
+function editItem(item)
+{
+
+const name =
+prompt(
+"商品名",
+item.name
+);
+
+
+
+if(!name)
+return;
+
+
+
+item.name=name;
+
+
+
+updateItem(item);
+
+
+render();
+
+}
+
+
+
 
 
 
@@ -425,28 +448,23 @@ area.appendChild(wrap);
 function toggleStock(id)
 {
 
-const items =
-getItems();
+const items=getItems();
 
 
 
 const item =
 items.find(
-x =>
-x.id === id
+x=>x.id===id
 );
 
 
 
 if(!item)
-{
 return;
-}
 
 
 
-item.stock =
-!item.stock;
+item.stock=!item.stock;
 
 
 
@@ -463,14 +481,11 @@ render();
 
 
 
-
-
-
 function updateCount()
 {
 
-const items =
-getItems();
+
+const items=getItems();
 
 
 
@@ -483,7 +498,7 @@ document
 if(total)
 {
 
-total.textContent =
+total.textContent=
 `登録 ${items.length}件`;
 
 }
@@ -501,13 +516,17 @@ document
 if(shopping)
 {
 
-shopping.textContent =
-`買い物 ${
+const count =
 items.filter(
-x=>!x.stock
-).length
-}件`;
+x=>x.stock===false
+).length;
+
+
+
+shopping.textContent=
+`買い物 ${count}件`;
 
 }
+
 
 }
