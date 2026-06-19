@@ -17,11 +17,6 @@ let placeholder = null;
 
 
 
-/*
---------------------------------
-初期化
---------------------------------
-*/
 
 function init()
 {
@@ -66,8 +61,6 @@ function init()
 
 
 
-
-
 function render()
 {
 
@@ -83,15 +76,6 @@ function render()
 
 
 
-
-
-
-
-/*
---------------------------------
-商品登録
---------------------------------
-*/
 
 function addItemForm()
 {
@@ -121,7 +105,6 @@ function addItemForm()
 
 
 
-
     addItem(
     {
 
@@ -140,7 +123,6 @@ function addItemForm()
     .value="";
 
 
-
     render();
 
 }
@@ -151,11 +133,6 @@ function addItemForm()
 
 
 
-/*
---------------------------------
-セレクト
---------------------------------
-*/
 
 function renderSelect()
 {
@@ -170,7 +147,6 @@ function renderSelect()
         .getElementById(
             "item-category"
         );
-
 
 
     const filter =
@@ -194,6 +170,7 @@ function renderSelect()
 
 
 
+
     categories.forEach(
         c =>
         {
@@ -204,6 +181,7 @@ function renderSelect()
             ${c}
             </option>
             `;
+
 
 
             filter.innerHTML +=
@@ -231,11 +209,6 @@ function renderSelect()
 
 
 
-/*
---------------------------------
-在庫一覧
---------------------------------
-*/
 
 function renderInventory()
 {
@@ -254,6 +227,7 @@ function renderInventory()
 
     let items =
         getItems();
+
 
 
 
@@ -281,7 +255,9 @@ function renderInventory()
         area.innerHTML =
         `
         <div class="empty">
+
         商品なし
+
         </div>
         `;
 
@@ -320,24 +296,25 @@ function renderInventory()
 
 
             div.dataset.id =
-                item.id;
+            item.id;
 
 
 
 
 
             div.ondragstart =
-                dragStart;
+            dragStart;
 
 
 
             div.ondragover =
-                dragOver;
+            dragOver;
 
 
 
             div.ondrop =
-                dropItem;
+            dropItem;
+
 
 
 
@@ -352,14 +329,11 @@ function renderInventory()
                     e.target.closest(
                     "button"
                     )
-                    ||
-                    e.target.closest(
-                    "input"
-                    )
                 )
                 {
                     return;
                 }
+
 
 
                 toggleStock(
@@ -374,26 +348,41 @@ function renderInventory()
 
 
 
-
             div.innerHTML =
 `
 <div class="watermark">
+
 在庫なし
+
 </div>
+
 
 
 <div class="item-info">
 
 
 <span class="item-name">
+
 ${item.name}
+
 </span>
 
 
 
 <span class="item-category">
+
 ${item.category}
+
 </span>
+
+
+
+<span class="stock-status">
+
+${item.stock ? "在庫あり":"在庫なし"}
+
+</span>
+
 
 
 </div>
@@ -404,31 +393,20 @@ ${item.category}
 <div class="item-actions">
 
 
-<label class="switch">
-
-<input
-type="checkbox"
-${item.stock?"checked":""}
-onclick="event.stopPropagation()"
-onchange="toggleStock(${item.id})">
-
-
-<span class="slider">
-</span>
-
-
-</label>
-
 
 
 
 <button
+
 class="delete-button"
+
 onclick="event.stopPropagation();removeItem(${item.id})">
 
-🗑
+×
 
 </button>
+
+
 
 
 </div>
@@ -452,12 +430,52 @@ onclick="event.stopPropagation();removeItem(${item.id})">
 
 
 
+function toggleStock(id)
+{
 
-/*
---------------------------------
-ドラッグ
---------------------------------
-*/
+    const items =
+        getItems();
+
+
+
+    const item =
+        items.find(
+            x =>
+            x.id===id
+        );
+
+
+
+    if(!item)
+    {
+        return;
+    }
+
+
+
+    item.stock =
+        !item.stock;
+
+
+
+    item.shopping =
+        !item.stock;
+
+
+
+    updateItem(item);
+
+
+
+    render();
+
+}
+
+
+
+
+
+
 
 function dragStart(e)
 {
@@ -468,6 +486,7 @@ function dragStart(e)
     );
 
 }
+
 
 
 
@@ -538,12 +557,9 @@ function dropItem(e)
     placeholder=null;
 
 
-
     render();
 
 }
-
-
 
 
 
@@ -571,7 +587,6 @@ function reorder(
         x =>
         x.id===from
     );
-
 
 
     const toIndex =
@@ -608,65 +623,6 @@ function reorder(
 
 
 
-
-/*
---------------------------------
-在庫切替
---------------------------------
-*/
-
-function toggleStock(id)
-{
-
-    const items =
-        getItems();
-
-
-
-    const item =
-        items.find(
-            x=>x.id===id
-        );
-
-
-
-    if(!item)
-    {
-        return;
-    }
-
-
-
-    item.stock =
-        !item.stock;
-
-
-
-    item.shopping =
-        !item.stock;
-
-
-
-    updateItem(item);
-
-
-
-    render();
-
-}
-
-
-
-
-
-
-
-/*
---------------------------------
-削除
---------------------------------
-*/
-
 function removeItem(id)
 {
 
@@ -687,11 +643,6 @@ function removeItem(id)
 
 
 
-/*
---------------------------------
-件数
---------------------------------
-*/
 
 function updateCount()
 {
@@ -717,7 +668,7 @@ function updateCount()
     .textContent =
     `買い物 ${
     items.filter(
-        x=>x.shopping
+        x=>!x.stock
     ).length
     }件`;
 
