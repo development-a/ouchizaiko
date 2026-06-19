@@ -1,34 +1,29 @@
 document.addEventListener(
-    "DOMContentLoaded",
-    () =>
-    {
-        setup();
+"DOMContentLoaded",
+()=>{
 
-        renderCategories();
-    }
+setup();
+
+renderCategories();
+
+}
+
 );
 
 
 
 
 
-/*
---------------------------------
-初期化
---------------------------------
-*/
 
 function setup()
 {
 
-    document
-    .getElementById(
-        "add-category"
-    )
-    .addEventListener(
-        "click",
-        addNewCategory
-    );
+document
+.getElementById("add-category")
+?.addEventListener(
+"click",
+addNewCategory
+);
 
 }
 
@@ -37,50 +32,47 @@ function setup()
 
 
 
-/*
---------------------------------
-ジャンル追加
---------------------------------
-*/
+
+
 
 function addNewCategory()
 {
 
-    const input =
-        document
-        .getElementById(
-            "new-category"
-        );
+
+const input =
+document
+.getElementById("new-category");
 
 
 
-    const name =
-        input.value.trim();
+const name =
+input.value.trim();
 
 
 
-    if(name === "")
-    {
+if(name==="")
+{
 
-        alert(
-            "ジャンル名を入力してください"
-        );
+alert(
+"ジャンル名を入力してください"
+);
 
-        return;
+return;
 
-    }
-
-
-
-    addCategory(name);
+}
 
 
 
-    input.value = "";
+
+addCategory(name);
 
 
 
-    renderCategories();
+input.value="";
+
+
+
+renderCategories();
 
 }
 
@@ -90,85 +82,115 @@ function addNewCategory()
 
 
 
-/*
---------------------------------
-一覧表示
---------------------------------
-*/
+
 
 function renderCategories()
 {
 
-    const area =
-        document
-        .getElementById(
-            "category-list"
-        );
+
+const area =
+document
+.getElementById("category-list");
 
 
 
-    area.innerHTML="";
+if(!area)
+return;
 
 
 
-    const categories =
-        getCategories();
+area.innerHTML="";
 
 
 
 
-    if(categories.length === 0)
-    {
-
-        area.innerHTML =
-        `
-        <div class="empty">
-        ジャンルなし
-        </div>
-        `;
-
-        return;
-
-    }
+const categories =
+getCategories();
 
 
 
 
 
-    categories.forEach(
-        category =>
-        {
+if(categories.length===0)
+{
 
-
-            area.innerHTML +=
+area.innerHTML=
 `
-<div class="category-item">
 
+<div class="empty">
+
+ジャンルなし
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+
+
+
+
+categories.forEach(
+category=>
+{
+
+
+const div =
+document.createElement("div");
+
+
+
+div.className =
+"category-item";
+
+
+
+
+div.innerHTML =
+`
 
 <span>
+
 ${category}
+
 </span>
 
 
-
-<button
-
-class="category-delete"
-
-onclick="removeCategory('${category}')">
+<button>
 
 削除
 
 </button>
 
-
-
-</div>
 `;
 
-        }
-    );
 
+
+
+
+
+div
+.querySelector("button")
+.addEventListener(
+"click",
+()=>{
+
+removeCategory(category);
+
+});
+
+
+
+
+
+area.appendChild(div);
+
+
+});
 
 }
 
@@ -178,31 +200,25 @@ onclick="removeCategory('${category}')">
 
 
 
-/*
---------------------------------
-削除
---------------------------------
-*/
+
 
 function removeCategory(name)
 {
 
-    if(
-        !confirm(
-            name +
-            "を削除しますか？"
-        )
-    )
-    {
-        return;
-    }
+
+if(
+!confirm(
+`${name}を削除しますか？`
+)
+)
+return;
 
 
 
-    deleteCategory(name);
+deleteCategory(name);
 
 
 
-    renderCategories();
+renderCategories();
 
 }
