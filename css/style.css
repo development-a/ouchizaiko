@@ -2,6 +2,7 @@
 
     margin:0;
     padding:0;
+
     box-sizing:border-box;
 
 }
@@ -29,7 +30,6 @@ body{
 
 
 
-
 header{
 
     background:#2563eb;
@@ -48,8 +48,6 @@ header{
 
 
 
-
-
 header h1{
 
     font-size:24px;
@@ -59,12 +57,11 @@ header h1{
 
 
 
-
 .summary{
 
     display:flex;
 
-    gap:15px;
+    gap:10px;
 
 }
 
@@ -87,7 +84,6 @@ header h1{
 
 
 
-
 main{
 
     width:90%;
@@ -96,13 +92,13 @@ main{
 
     margin:30px auto;
 
+    flex:1;
+
     display:flex;
 
     flex-direction:column;
 
     gap:20px;
-
-    flex:1;
 
 }
 
@@ -111,18 +107,23 @@ main{
 
 
 .input-card,
+.category-card,
+.filter-card,
 .list-card,
 .shopping-card{
 
-    background:white;
 
-    border-radius:15px;
+    background:white;
 
     padding:25px;
 
+    border-radius:15px;
+
+
     box-shadow:
-        0 4px 15px
-        rgba(0,0,0,0.1);
+
+    0 4px 15px
+    rgba(0,0,0,0.1);
 
 }
 
@@ -132,7 +133,7 @@ main{
 
 h2{
 
-    margin-bottom:20px;
+    margin-bottom:15px;
 
 }
 
@@ -154,7 +155,6 @@ h2{
 
 
 
-
 input,
 select,
 button{
@@ -165,26 +165,22 @@ button{
 
     border:1px solid #ddd;
 
-    font-size:15px;
-
 }
-
 
 
 
 
 button{
 
-    background:#2563eb;
-
-    color:white;
+    cursor:pointer;
 
     border:none;
 
-    cursor:pointer;
+    color:white;
+
+    background:#2563eb;
 
 }
-
 
 
 
@@ -199,8 +195,8 @@ button:hover{
 
 
 
+.category-item{
 
-.item{
 
     display:flex;
 
@@ -210,11 +206,71 @@ button:hover{
 
     background:#f8fafc;
 
+    padding:10px;
+
+    border-radius:8px;
+
+    margin-bottom:8px;
+
+}
+
+
+
+
+
+.category-delete{
+
+
+    background:#dc2626;
+
+    padding:5px 8px;
+
+    font-size:12px;
+
+}
+
+
+
+
+
+
+.group-title{
+
+
+    margin-top:20px;
+
     margin-bottom:10px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:#2563eb;
+
+}
+
+
+
+
+
+
+.item{
+
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+
+    background:#f8fafc;
 
     padding:15px;
 
     border-radius:10px;
+
+    margin-bottom:10px;
 
 }
 
@@ -224,6 +280,7 @@ button:hover{
 
 .item-info{
 
+
     display:flex;
 
     flex-direction:column;
@@ -231,7 +288,6 @@ button:hover{
     gap:8px;
 
 }
-
 
 
 
@@ -250,19 +306,17 @@ button:hover{
 
 .item-category{
 
-    font-size:13px;
-
     color:#64748b;
+
+    font-size:13px;
 
 }
 
 
 
 
-
 .status{
 
-    display:inline-block;
 
     width:max-content;
 
@@ -282,6 +336,7 @@ button:hover{
 
 .stock-ok{
 
+
     background:#dcfce7;
 
     color:#16a34a;
@@ -291,8 +346,8 @@ button:hover{
 
 
 
-
 .stock-ng{
+
 
     background:#fee2e2;
 
@@ -306,9 +361,12 @@ button:hover{
 
 .item-actions{
 
+
     display:flex;
 
-    gap:8px;
+    gap:6px;
+
+    align-items:center;
 
 }
 
@@ -316,7 +374,8 @@ button:hover{
 
 
 
-.small-button{
+.stock-button{
+
 
     padding:8px 12px;
 
@@ -326,15 +385,7 @@ button:hover{
 
 
 
-.delete{
-
-    background:#dc2626;
-
-}
-
-
-
-.stock{
+.stock-on{
 
     background:#16a34a;
 
@@ -342,9 +393,53 @@ button:hover{
 
 
 
+.stock-off{
+
+    background:#dc2626;
+
+}
+
+
+
+
+
+
+.delete-button{
+
+
+    background:#64748b;
+
+    width:32px;
+
+    height:32px;
+
+    padding:0;
+
+    font-size:15px;
+
+}
+
+
+
+
+.move-button{
+
+
+    background:#7c3aed;
+
+    width:32px;
+
+    height:32px;
+
+    padding:0;
+
+}
+
+
 
 
 .shopping-item{
+
 
     background:#fff7ed;
 
@@ -364,9 +459,10 @@ button:hover{
 
 .empty{
 
-    color:#94a3b8;
 
     text-align:center;
+
+    color:#94a3b8;
 
     padding:20px;
 
@@ -378,14 +474,14 @@ button:hover{
 
 footer{
 
+
+    background:#e2e8f0;
+
     text-align:center;
 
     padding:15px;
 
-    background:#e2e8f0;
-
 }
-
 
 
 
@@ -397,9 +493,9 @@ footer{
 
 header{
 
-    flex-direction:column;
+flex-direction:column;
 
-    gap:15px;
+gap:15px;
 
 }
 
@@ -407,7 +503,7 @@ header{
 
 .form{
 
-    grid-template-columns:1fr;
+grid-template-columns:1fr;
 
 }
 
@@ -415,11 +511,11 @@ header{
 
 .item{
 
-    flex-direction:column;
+flex-direction:column;
 
-    align-items:flex-start;
+align-items:flex-start;
 
-    gap:15px;
+gap:15px;
 
 }
 
@@ -427,17 +523,10 @@ header{
 
 .item-actions{
 
-    width:100%;
+width:100%;
 
 }
 
-
-
-.item-actions button{
-
-    flex:1;
-
-}
 
 
 }
