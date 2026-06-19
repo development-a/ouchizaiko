@@ -1,302 +1,35 @@
-*{
-
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-
-}
-
-
-
-body{
-
-    min-height:100vh;
-
-    background:#f3f6fb;
-
-    color:#333;
-
-    font-family:
-    "Segoe UI",
-    sans-serif;
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-
-
-
-
-header{
-
-    background:#2563eb;
-
-    color:white;
-
-    padding:20px;
-
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:20px;
-
-}
-
-
-
-
-nav{
-
-    display:flex;
-
-    gap:10px;
-
-}
-
-
-
-
-
-header a{
-
-    color:white;
-
-    text-decoration:none;
-
-    background:
-    rgba(255,255,255,.2);
-
-    padding:8px 14px;
-
-    border-radius:20px;
-
-}
-
-
-
-
-
-
-.summary{
-
-    display:flex;
-
-    gap:10px;
-
-}
-
-
-
-
-
-.summary span{
-
-    background:white;
-
-    color:#2563eb;
-
-    padding:8px 14px;
-
-    border-radius:20px;
-
-    font-weight:bold;
-
-}
-
-
-
-
-
-.shopping-link{
-
-    text-decoration:none;
-
-}
-
-
-
-
-
-
-
-main{
-
-    width:90%;
-
-    max-width:900px;
-
-    margin:30px auto;
-
-    flex:1;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
-
-}
-
-
-
-
-
-.input-card,
-.list-card,
-.shopping-card,
-.category-card{
-
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:15px;
-
-
-    box-shadow:
-
-    0 4px 15px
-    rgba(0,0,0,.1);
-
-}
-
-
-
-
-
-
-
-.form{
-
-    display:grid;
-
-    grid-template-columns:
-
-    2fr 1fr 1fr;
-
-    gap:10px;
-
-}
-
-
-
-
-
-
-input,
-select,
-button{
-
-
-    padding:12px;
-
-
-    border-radius:8px;
-
-
-    border:1px solid #ddd;
-
-}
-
-
-
-
-button{
-
-
-    background:#2563eb;
-
-    color:white;
-
-    border:none;
-
-    cursor:pointer;
-
-}
-
-
-
-
-
-
-
-.list-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:15px;
-
-}
-
-
-
-
-
-
-
-
+/* カード幅調整 */
 
 .item{
 
-
     position:relative;
+
+    width:100%;
+
+    max-width:650px;
+
+    margin:0 auto 8px;
 
 
     background:#f8fafc;
 
+    padding:10px 14px;
 
-    padding:15px;
-
-
-    border-radius:12px;
-
-
-    margin-bottom:10px;
+    border-radius:10px;
 
 
     display:flex;
 
-
     justify-content:space-between;
-
 
     align-items:center;
 
 
     cursor:pointer;
 
-
     overflow:hidden;
 
-
-    transition:.2s;
-
 }
-
-
-
-
-.item:hover{
-
-    transform:translateY(-2px);
-
-}
-
-
-
-
 
 
 
@@ -304,12 +37,9 @@ button{
 
 .item.no-stock{
 
-
     background:#fee2e2;
 
-
     border:
-
     1px solid #fecaca;
 
 }
@@ -318,12 +48,9 @@ button{
 
 
 
-
+/* 在庫なし透かし */
 
 .watermark{
-
-
-    display:none;
 
 
     position:absolute;
@@ -336,11 +63,10 @@ button{
 
 
     transform:
-
     translateY(-50%);
 
 
-    font-size:46px;
+    font-size:42px;
 
 
     font-weight:bold;
@@ -354,17 +80,6 @@ button{
 
     pointer-events:none;
 
-}
-
-
-
-
-
-.item.no-stock
-.watermark{
-
-
-    display:block;
 
 }
 
@@ -380,9 +95,8 @@ button{
 
     flex-direction:column;
 
-    gap:5px;
+    gap:3px;
 
-    z-index:2;
 
 }
 
@@ -390,10 +104,9 @@ button{
 
 
 
-
 .item-name{
 
-    font-size:18px;
+    font-size:16px;
 
     font-weight:bold;
 
@@ -405,64 +118,24 @@ button{
 
 .item-category{
 
+    font-size:12px;
+
     color:#64748b;
 
-    font-size:13px;
-
 }
 
 
 
 
 
-
-
-.item-actions{
-
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    z-index:3;
-
-}
-
-
-
-
-
-
-.stock-status{
-
-
-    font-size:13px;
-
-    font-weight:bold;
-
-    background:#e2e8f0;
-
-    padding:5px 10px;
-
-    border-radius:20px;
-
-}
-
-
-
-
-
-
+/* ×ボタン */
 
 .delete-button{
 
 
-    width:30px;
+    width:28px;
 
-
-    height:30px;
+    height:28px;
 
 
     padding:0;
@@ -471,78 +144,17 @@ button{
     border-radius:50%;
 
 
-    background:#64748b;
-
-
-    font-size:18px;
-
-}
-
-
-
-
-
-
-
-.shopping-item{
-
-
-    background:#fff7ed;
-
-
-    padding:15px;
-
-
-    border-radius:10px;
-
-
-}
-
-
-
-
-
-
-
-.category-item{
-
-
-    display:flex;
-
-
-    justify-content:space-between;
-
-
-    align-items:center;
-
-
-
-    background:#f8fafc;
-
-
-    padding:12px;
-
-
-    border-radius:8px;
-
-
-    margin-bottom:10px;
-
-}
-
-
-
-
-
-
-
-.category-delete{
-
-
     background:#dc2626;
 
 
-    padding:6px 10px;
+    color:white;
+
+
+    font-size:20px;
+
+
+    line-height:28px;
+
 
 }
 
@@ -550,115 +162,25 @@ button{
 
 
 
+/* 不要表示 */
 
+.stock-status{
 
-.drag-line{
-
-
-    height:4px;
-
-
-    margin:6px 0;
-
-
-    border-top:
-
-    3px dashed #2563eb;
+    display:none;
 
 }
-
-
-
-
-
-
-.empty{
-
-
-    text-align:center;
-
-
-    color:#94a3b8;
-
-
-    padding:20px;
-
-}
-
-
-
-
-
-
-footer{
-
-
-    background:#e2e8f0;
-
-
-    text-align:center;
-
-
-    padding:15px;
-
-}
-
-
 
 
 
 
 
 @media(max-width:700px)
-
 {
-
-
-header{
-
-    flex-direction:column;
-
-}
-
-
-
-
-.form{
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-
 
 .item{
 
-
-    flex-direction:column;
-
-
-    align-items:flex-start;
-
-
-    gap:15px;
+    max-width:100%;
 
 }
-
-
-
-
-
-.item-actions{
-
-
-    width:100%;
-
-
-    justify-content:flex-end;
-
-}
-
 
 }
