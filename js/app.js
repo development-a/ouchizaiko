@@ -7,7 +7,6 @@ document.addEventListener(
 );
 
 
-
 let currentFilter = "all";
 
 let dragId = null;
@@ -16,48 +15,34 @@ let placeholder = null;
 
 
 
-
-
-
-
 function init()
 {
 
     document
-    .getElementById(
-        "add-button"
-    )
-    .addEventListener(
+    .getElementById("add-button")
+    ?.addEventListener(
         "click",
         addItemForm
     );
 
 
-
     document
-    .getElementById(
-        "filter-category"
-    )
-    .addEventListener(
+    .getElementById("filter-category")
+    ?.addEventListener(
         "change",
         e =>
         {
-
             currentFilter =
             e.target.value;
 
-
             renderInventory();
-
         }
     );
-
 
 
     render();
 
 }
-
 
 
 
@@ -81,25 +66,19 @@ function render()
 
 
 
-
 function addItemForm()
 {
 
     const name =
-        document
-        .getElementById(
-            "item-name"
-        )
-        .value;
-
+    document
+    .getElementById("item-name")
+    .value;
 
 
     const category =
-        document
-        .getElementById(
-            "item-category"
-        )
-        .value;
+    document
+    .getElementById("item-category")
+    .value;
 
 
 
@@ -110,25 +89,16 @@ function addItemForm()
 
 
 
-
     addItem(
     {
-
         name:name,
-
         category:category
-
     });
 
 
-
-
     document
-    .getElementById(
-        "item-name"
-    )
+    .getElementById("item-name")
     .value="";
-
 
 
     render();
@@ -147,28 +117,28 @@ function renderSelect()
 {
 
     const categories =
-        getCategories();
-
+    getCategories();
 
 
     const select =
-        document
-        .getElementById(
-            "item-category"
-        );
-
+    document
+    .getElementById("item-category");
 
 
     const filter =
-        document
-        .getElementById(
-            "filter-category"
-        );
+    document
+    .getElementById("filter-category");
+
+
+
+    if(!select || !filter)
+    {
+        return;
+    }
 
 
 
     select.innerHTML="";
-
 
 
     filter.innerHTML =
@@ -180,12 +150,9 @@ function renderSelect()
 
 
 
-
-
     categories.forEach(
         category =>
         {
-
 
             select.innerHTML +=
             `
@@ -195,14 +162,12 @@ function renderSelect()
             `;
 
 
-
             filter.innerHTML +=
             `
             <option value="${category}">
             ${category}
             </option>
             `;
-
 
         }
     );
@@ -226,10 +191,15 @@ function renderInventory()
 {
 
     const area =
-        document
-        .getElementById(
-            "inventory-list"
-        );
+    document
+    .getElementById("inventory-list");
+
+
+
+    if(!area)
+    {
+        return;
+    }
 
 
 
@@ -243,9 +213,7 @@ function renderInventory()
 
 
 
-    if(
-        currentFilter !== "all"
-    )
+    if(currentFilter !== "all")
     {
 
         items =
@@ -261,36 +229,13 @@ function renderInventory()
 
 
 
-
-    if(items.length === 0)
-    {
-
-        area.innerHTML =
-        `
-        <div class="empty">
-        商品なし
-        </div>
-        `;
-
-
-        return;
-
-    }
-
-
-
-
-
-
     items.forEach(
         item =>
         {
 
 
             const div =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
 
 
@@ -303,8 +248,7 @@ function renderInventory()
 
 
 
-            div.draggable = true;
-
+            div.draggable=true;
 
 
             div.dataset.id =
@@ -313,16 +257,12 @@ function renderInventory()
 
 
 
-
-
             div.ondragstart =
             dragStart;
 
 
-
             div.ondragover =
             dragOver;
-
 
 
             div.ondrop =
@@ -333,28 +273,13 @@ function renderInventory()
 
 
 
-
             div.onclick =
-            e =>
+            () =>
             {
-
-                if(
-                    e.target.closest(
-                        "button"
-                    )
-                )
-                {
-                    return;
-                }
-
-
-
                 toggleStock(
                     item.id
                 );
-
             };
-
 
 
 
@@ -363,11 +288,13 @@ function renderInventory()
 
             div.innerHTML =
 `
+${item.stock ? "" :
+`
 <div class="watermark">
-
 在庫なし
-
 </div>
+`
+}
 
 
 
@@ -381,7 +308,6 @@ ${item.name}
 </span>
 
 
-
 <span class="item-category">
 
 ${item.category}
@@ -389,9 +315,7 @@ ${item.category}
 </span>
 
 
-
 </div>
-
 
 
 
@@ -400,9 +324,7 @@ ${item.category}
 
 
 <button
-
 class="delete-button"
-
 onclick="event.stopPropagation();removeItem(${item.id})">
 
 ×
@@ -432,12 +354,12 @@ onclick="event.stopPropagation();removeItem(${item.id})">
 
 
 
+
 function toggleStock(id)
 {
 
     const items =
     getItems();
-
 
 
     const item =
@@ -455,16 +377,13 @@ function toggleStock(id)
 
 
 
-
     item.stock =
     !item.stock;
 
 
 
-
     item.shopping =
     !item.stock;
-
 
 
 
@@ -499,12 +418,10 @@ function dragStart(e)
 
 
 
-
 function dragOver(e)
 {
 
     e.preventDefault();
-
 
 
     const target =
@@ -516,9 +433,7 @@ function dragOver(e)
     {
 
         placeholder =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
         placeholder.className =
@@ -527,13 +442,11 @@ function dragOver(e)
     }
 
 
-
     target.before(
         placeholder
     );
 
 }
-
 
 
 
@@ -563,8 +476,7 @@ function dropItem(e)
 
     placeholder?.remove();
 
-
-    placeholder = null;
+    placeholder=null;
 
 
 
@@ -579,10 +491,7 @@ function dropItem(e)
 
 
 
-function reorder(
-from,
-to
-)
+function reorder(from,to)
 {
 
     const data =
@@ -600,7 +509,6 @@ to
         x =>
         x.id === from
     );
-
 
 
     const toIndex =
@@ -638,27 +546,19 @@ to
 
 
 
-
 function removeItem(id)
 {
 
-    if(
-        confirm(
-            "削除しますか？"
-        )
-    )
+    if(confirm("削除しますか？"))
     {
 
         deleteItem(id);
-
 
         render();
 
     }
 
 }
-
-
 
 
 
@@ -674,27 +574,40 @@ function updateCount()
 
 
 
-
+    const total =
     document
-    .getElementById(
-        "total-items"
-    )
-    .textContent =
-    `登録 ${items.length}件`;
+    .getElementById("total-items");
+
+
+
+    if(total)
+    {
+
+        total.textContent =
+        `登録 ${items.length}件`;
+
+    }
 
 
 
 
+
+    const shopping =
     document
-    .getElementById(
-        "shopping-count"
-    )
-    .textContent =
-    `買い物 ${
-    items.filter(
-        x =>
-        !x.stock
-    ).length
-    }件`;
+    .getElementById("shopping-count");
+
+
+
+    if(shopping)
+    {
+
+        shopping.textContent =
+        `買い物 ${
+        items.filter(
+            x=>!x.stock
+        ).length
+        }件`;
+
+    }
 
 }
