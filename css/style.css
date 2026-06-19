@@ -1,8 +1,11 @@
 *{
+
     margin:0;
     padding:0;
     box-sizing:border-box;
+
 }
+
 
 
 body{
@@ -20,7 +23,10 @@ body{
     display:flex;
 
     flex-direction:column;
+
 }
+
+
 
 
 
@@ -42,11 +48,15 @@ header{
 
 
 
+
+
 header h1{
 
     font-size:24px;
 
 }
+
+
 
 
 
@@ -102,8 +112,7 @@ main{
 
 .input-card,
 .list-card,
-.shopping-card,
-.warning-card{
+.shopping-card{
 
     background:white;
 
@@ -119,11 +128,11 @@ main{
 
 
 
+
+
 h2{
 
     margin-bottom:20px;
-
-    color:#1f2937;
 
 }
 
@@ -136,11 +145,13 @@ h2{
     display:grid;
 
     grid-template-columns:
-        repeat(4,1fr);
+        2fr 1fr 1fr;
 
     gap:10px;
 
 }
+
+
 
 
 
@@ -160,6 +171,8 @@ button{
 
 
 
+
+
 button{
 
     background:#2563eb;
@@ -174,11 +187,14 @@ button{
 
 
 
+
+
 button:hover{
 
     opacity:0.85;
 
 }
+
 
 
 
@@ -204,15 +220,19 @@ button:hover{
 
 
 
+
+
 .item-info{
 
     display:flex;
 
     flex-direction:column;
 
-    gap:5px;
+    gap:8px;
 
 }
+
+
 
 
 
@@ -226,6 +246,8 @@ button:hover{
 
 
 
+
+
 .item-category{
 
     font-size:13px;
@@ -236,6 +258,52 @@ button:hover{
 
 
 
+
+
+.status{
+
+    display:inline-block;
+
+    width:max-content;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+.stock-ok{
+
+    background:#dcfce7;
+
+    color:#16a34a;
+
+}
+
+
+
+
+
+.stock-ng{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+
+
+
+
 .item-actions{
 
     display:flex;
@@ -243,6 +311,8 @@ button:hover{
     gap:8px;
 
 }
+
+
 
 
 
@@ -264,7 +334,7 @@ button:hover{
 
 
 
-.buy{
+.stock{
 
     background:#16a34a;
 
@@ -276,25 +346,7 @@ button:hover{
 
 .shopping-item{
 
-    background:#ecfdf5;
-
-    padding:12px;
-
-    border-radius:8px;
-
-    margin-bottom:8px;
-
-}
-
-
-
-
-
-.expire-warning{
-
-    background:#fef2f2;
-
-    color:#dc2626;
+    background:#fff7ed;
 
     padding:12px;
 
@@ -339,6 +391,7 @@ footer{
 
 
 @media(max-width:700px)
+
 {
 
 
