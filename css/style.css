@@ -658,116 +658,57 @@ margin:5px 0;
 
 
 
-
-
 /* =====================
 category
 ===================== */
 
-
-.category-form{
-
-
-display:flex;
-
-
-gap:10px;
-
-
+.category-form
+{
+    display:flex;
+    gap:10px;
+    width:100%;
 }
 
-
-
-
-.category-form input{
-
-
-height:45px;
-
-
-font-size:16px;
-
-
-padding:0 14px;
-
-
-flex:1;
-
-
+.category-form input
+{
+    flex:1;
+    width:100%;
+    min-width:0;
+    height:45px;
+    font-size:16px;
+    padding:0 14px;
 }
 
-
-
-
-
-.category-list{
-
-
-display:flex;
-
-
-flex-direction:column;
-
-
-gap:10px;
-
-
+.category-form button
+{
+    min-width:100px;
 }
 
-
-
-
-
-.category-item{
-
-
-background:#f8fafc;
-
-
-padding:14px;
-
-
-border-radius:10px;
-
-
-border:1px solid #e5e7eb;
-
-
-display:flex;
-
-
-align-items:center;
-
-
-justify-content:space-between;
-
-
+.category-list
+{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
 }
 
-
-
-
-
-.category-item button{
-
-
-background:#dc2626;
-
-
-height:32px;
-
-
-padding:0 15px;
-
-
-border-radius:20px;
-
-
+.category-item
+{
+    background:#f8fafc;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 }
 
-
-
-
+.category-item button
+{
+    background:#dc2626;
+    height:32px;
+    padding:0 15px;
+    border-radius:20px;
+}
 
 
 
